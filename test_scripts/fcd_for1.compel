@@ -1,0 +1,13 @@
+/*
+  FOR loop demonstration program
+
+  Loops from 0 to 10 then when 2 is reached, we display something.
+*/
+var $i
+
+for $i 0 to 10
+{
+  if_gte $i 5 continue
+  if_eq $i 2 echo "!!i= " $i "\n"
+  echo "i = " $i "\n"
+}

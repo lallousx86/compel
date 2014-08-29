@@ -1,0 +1,8 @@
+var $o.
+var $v "hello"
+
+var $o.name "elias"
+var $o.lastname "b."
+
+echo "the object=" $o "\n"
+echo "lastname=" $o.lastname "\n"

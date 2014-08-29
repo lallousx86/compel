@@ -1,0 +1,13 @@
+CvClear
+CvTitle "Germany"
+
+CvColor 0 0 0
+CvRect 50 50 300 90
+
+CvColor 255 0 0
+CvRect 50 90 300 140
+
+CvColor 227 239 3
+CvRect 50 140 300 190
+
+end

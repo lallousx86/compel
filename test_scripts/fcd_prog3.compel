@@ -1,0 +1,28 @@
+/*
+  Thread sample prototype #1
+*/
+
+command call1
+{
+  echo "call1 called\n"
+}
+
+command thread1 $id
+{
+  echo "i am thread " $id "\n"
+
+  var $fargs.i
+
+  for $fargs.i 0 to 10
+  {
+    echo "i = " $fargs.i "\n"
+    delay 10
+    call1
+  }
+}
+
+var $id
+thread.create $id thread1 $id
+echo "waiting for thread (" $id ") to terminate..."
+thread.wait $id
+echo "main: done\n"

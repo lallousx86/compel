@@ -1,0 +1,22 @@
+/*
+  LABELS test
+*/
+
+# jump to a deferred label
+goto $label1
+hello world!
+these are never executed!
+
+# define the label
+label $label1
+
+# create a label
+var $ch
+var $i 0
+label $label2
+echo $i ") press a key or 'q' to quit: "
+getch $ch
+echo $ch "\n"
+add $i 1
+if_eq $ch "q" end
+goto $label2

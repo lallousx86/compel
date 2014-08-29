@@ -1,0 +1,12 @@
+/*
+  Arithmetics test program #3
+
+  Using the EXPR command
+*/
+
+var $expr "1+1"
+var $result
+inputbox $expr "Enter expression" "Expression Evaluator"
+expr $result $expr
+
+msgbox "Expression: " $expr "\nResult: " $result

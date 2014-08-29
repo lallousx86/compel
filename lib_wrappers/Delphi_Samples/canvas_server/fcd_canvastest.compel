@@ -1,0 +1,67 @@
+compellib.dl canvas "compel_canvas_ext.dll"
+
+Canvas.Create 400 400 0 0
+
+var $sx
+var $sy
+var $cx
+var $cy
+
+test2
+misc_test
+Canvas.Wait
+end
+Canvas.Dimensions &$sx &$sy &$cx &$cy
+Canvas.Resize $sx $sy
+var $i
+
+Canvas.SelectBkColor 0x0000FF
+Canvas.SelectFont "Harlow Solid Italic" 15 0xFF0000
+
+for $i 0 to 10
+{
+  expr $sy $i * 22
+  Canvas.SelectFgColor 0xFF0000
+//  Canvas.Line 0 $sy
+  var $s "Line " $i
+  Canvas.DrawText 0 $sy $s
+}
+Canvas.Wait
+Canvas.Close
+
+command misc_test
+{
+  Canvas.SetTitle "Haaaaa"
+  Canvas.Resize 400 400
+  Canvas.Clear 0xFF0000
+  Canvas.SelectBkColor 0x0000FF
+}
+
+command test2
+{
+  Canvas.Rectangle 20 20 50 50
+  Canvas.SelectBkColor 0x00FF00
+  Canvas.Rectangle 80 80 50 50
+  Canvas.DrawText 90 90 "Hi Elias!"
+  Canvas.Line 0 50 200 50
+}
+
+command drawtext_test
+{
+  var $font "Harlow Solid Italic"
+  Canvas.SelectBkColor 0x0000FF
+  Canvas.SelectFont $font 20 0xFF0000
+  Canvas.DrawText 0 0 $font
+
+  var $font "Eras Light ITC"
+  Canvas.SelectBkColor 0x00FF00
+  Canvas.SelectFont $font 20 0xFF0000
+  Canvas.DrawText 0 50 $font
+
+  var $font "Courier New"
+  Canvas.SelectBkColor 0xFF0000
+  Canvas.SelectFont $font 30 0x0000FF
+  Canvas.DrawText 0 80 $font
+
+}
+end

@@ -1,0 +1,17 @@
+/*
+  Demonstrates the recursive command calls
+
+  How to access the command's FARGS object and its attributes
+*/
+
+recurse_test
+
+end
+
+command recurse_test
+{
+  echo "L_in = " $fargs._level "\n"
+  if_gte $fargs._level 5 return
+  recurse_test
+  echo "L_out= " $fargs._level "\n"
+}

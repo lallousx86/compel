@@ -1,0 +1,34 @@
+/*
+  simple var declaration test
+  also test of unvar procedures
+*/
+
+# declare a variable
+var $var 1
+
+# declare an object
+var $obj1.
+
+# declare an attribute of the object
+var $obj1.name "hello world"
+
+echo "var=" $var "\n"
+
+# display object dump
+echo "obj1=" $obj1 "\n"
+
+# delete the name attribute
+unvar $obj1.name
+
+# dump object again
+echo "obj1=" $obj1 "\n"
+
+# 
+unvar $var
+unvar $obj1
+
+# display unvar-ed variables
+echo "var=" $var "\n"
+echo "obj1=" $obj1 "\n"
+
+end

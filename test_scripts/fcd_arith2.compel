@@ -1,0 +1,45 @@
+/*
+  Arithmetics test program #2
+*/
+
+# checks whether the passed operator is accepted / supported
+command is_valid_op $op
+{
+  assign $is_valid_op 1
+  if_eq $fargs.op "+" return
+  if_eq $fargs.op "-" return
+  if_eq $fargs.op "*" return
+  return 0
+}
+
+var $op
+var $opr1
+var $opr2
+var $valid_op 0
+{
+  echo "Enter oprand 1 and press ENTER:"
+  inputline $opr1
+  {
+      echo "Type operator:"
+
+      # read operator
+      getch $op
+      is_valid_op $op
+      if $is_valid_op == 0
+      {
+        echo "Invalid operator! try again!\n"
+        continue 1
+      }
+      echo $op "\n"
+  }
+  echo "Enter oprand 2 and press ENTER:"
+  inputline $opr2
+  echo "calculating: " $opr1 $op $opr2 "= "
+
+  if_eq $op "+" add $opr1 $opr2
+  if_eq $op "-" sub $opr1 $opr2
+  if_eq $op "*" mul $opr1 $opr2
+  echo $opr1 "\n"
+}
+
+end

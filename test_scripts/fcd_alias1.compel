@@ -1,0 +1,14 @@
+var $i 11
+alias $i $j rename
+end
+var $i ">me, i<"
+alias echo elias
+alias elias chadi
+elias "elias:hello world\n"
+echo "echo:hello world2\n"
+chadi "chadi:hello world!\n"
+var $k 11
+alias $k $newk rename
+echo "k = " $k " newk=" $newk "\n";
+
+end

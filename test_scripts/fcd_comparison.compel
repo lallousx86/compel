@@ -1,0 +1,12 @@
+var $v1
+assign $v1 1000
+
+label $repeat
+
+add $v1 1
+
+echo "v1 = " $v1 "\n"
+
+if_lte $v1 1010 $repeat
+
+echo $v1 " finished!\n"

@@ -1,0 +1,20 @@
+#
+# FACTORIAL command in an iterative manner
+#
+
+command factorial_iterative $n
+{
+  var $fargs.r 1
+  var $fargs.i
+
+  for $fargs.i 1 to $fargs.n
+  {
+    mul $fargs.r $fargs.i
+  }
+  return $fargs.r
+}
+
+var $n
+inputbox $n "Enter number:"
+factorial_iterative $n
+msgbox "fact(" $n ") = " $factorial_iterative

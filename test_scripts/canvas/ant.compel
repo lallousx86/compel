@@ -1,0 +1,12 @@
+# Welcome to COMPEL
+var $i
+var $j 2
+karchouneh
+for $i 1 to 5
+{
+  expr $j $i * 2
+  echo "j=" $j "\n"
+}
+
+getch
+end

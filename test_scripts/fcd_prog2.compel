@@ -1,0 +1,48 @@
+/*
+  Thread sample prototype #1
+*/
+
+command outat $x $y $str
+{
+  var $fargs.sx
+  var $fargs.sy
+
+  getxy $fargs.sx $fargs.sy
+  gotoxy $fargs.x $fargs.y
+  echo "outat:" $fargs.str
+  gotoxy $fargs.sx $fargs.sy
+}
+
+command thread1 $id $x $y
+{
+  echo "i am thread " $id "\n"
+
+  var $fargs.i 0
+
+  for $fargs.i 0 to 1000
+  {
+    var $fargs.str "i=" $fargs.i "    "
+
+    //outat $fargs.x $fargs.y $fargs.str
+    echo $fargs.str "\n"
+    if $exit == 1 
+    {
+      echo "thread: exit signaled\n"
+      goto $lend
+    }
+    delay 1000
+  }
+  label $lend
+  echo "i am exiting thread1\n"
+}
+
+var $exit 0
+var $id
+thread.create $id thread1 $id 10 20
+echo "waiting for thread (" $id ") to terminate..."
+var $str
+
+inputline $str
+var $exit 1
+thread.wait $id
+echo "main: done\n"

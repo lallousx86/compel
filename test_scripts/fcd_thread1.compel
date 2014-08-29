@@ -1,0 +1,64 @@
+/*
+  Thread sample prototype #1
+
+  You should not use local variables in a thread
+*/
+
+command thread1
+{
+  {
+    add $i_1 1
+    echo "thread1: " $i_1 "\n"
+    if $exit_1 == 1 
+    {
+      echo "thread1: exit signaled\n"
+      goto $lend1
+    }
+    delay 1000
+    continue
+  }
+  label $lend1
+  echo "thread1: i am exiting thread\n"
+}
+
+command thread2
+{
+  {
+    add $i_2 1
+    echo "thread2: " $i_2 "\n"
+    if $exit_2 == 1 
+    {
+      echo "thread2: exit signaled\n"
+      goto $lend2
+    }
+    delay 1000
+    continue
+  }
+  label $lend2
+  echo "thread2: i am exiting thread\n"
+}
+
+var $i_1 0
+var $i_2 0
+var $exit_1 0
+var $exit_2 0
+var $id1
+var $id2
+
+thread.create $id1 thread1 $id1 20 20
+thread.create $id2 thread2 $id2 10 10
+
+echo "waiting for thread (" $id1 ", " $id2 ") to terminate..."
+
+var $str
+inputline $str
+
+// signal exit for #1 and #2
+var $exit_1 1
+var $exit_2 1
+
+// wait for them to finish
+thread.wait $id1
+thread.wait $id2
+
+echo "main: done\n"

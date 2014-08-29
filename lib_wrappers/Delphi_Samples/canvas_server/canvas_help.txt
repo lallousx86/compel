@@ -1,0 +1,21 @@
+Canvas.SelectFont "FontName" FontSize Fontcolor
+Canvas.SetOnTop 0|1
+Canvas.Create [Width] [Height] [X] [Y]
+Canvas.Close
+Canvas.Wait
+Canvas.SetTitle Title
+Canvas.Resize NewWidth NewHeight
+Canvas.SelectBkColor RGB
+Canvas.SelectFgColor RGB
+Canvas.Clear [BkColor_RGB]
+Canvas.DrawText X Y "text"
+Canvas.Rectangle X1 Y1 X2 Y2
+Canvas.Line X1 Y1 X2 Y2
+Canvas.MaxDimensions &$ScreenX &$ScreenY &$CanvasX &$CanvasY
+Canvas.Ellipse X1 Y1 X2 Y2
+Canvas.Circle X Y Radius
+Canvas.LoadImage FileName X1 Y1 [X2 Y2]
+Canvas.Move X Y
+Canvas.SaveCanvas FileName.BMP
+Canvas.SelectCanvas CanvasID
+

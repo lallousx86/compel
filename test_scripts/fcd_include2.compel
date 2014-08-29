@@ -1,0 +1,3 @@
+echo "file2 1\n"
+include "fcd_3.compel"
+echo "file2 2\n"

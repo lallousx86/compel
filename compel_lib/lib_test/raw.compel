@@ -1,0 +1,5 @@
+var $i 0
+for 1 $i 0 to 100
+{ 1
+  echo "i=" $i "\n"
+} 1

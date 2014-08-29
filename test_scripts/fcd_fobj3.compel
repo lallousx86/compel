@@ -1,0 +1,46 @@
+/*
+  File Object Test #3
+
+  File copy test.
+
+  Run this script with valid arguments. Use the accompanying batch file
+*/
+
+echo "\nCOMPEL - copy sample\n"
+
+if $ARGS.count < 2
+{
+  echo "usage: " $ARGS.0 " file1 file2\n"
+  end
+}
+
+
+fopen $fp_src $ARGS.1 "rb"
+if $fp_src.ok != 1
+{
+  echo "input file not found!\n"
+  end
+}
+
+fopen $fp_dest $ARGS.2 "wb"
+if $fp_dest.ok != 1
+{
+  echo "could not create output file:" $ARGS.2 "\n"
+  end
+}
+
+echo "Input file size: " $fp_src.size " byte(s)\n"
+
+echo "Copying...\n"
+
+malloc $mem $fp_src.size
+fread $fp_src $mem
+fwrite $fp_dest $mem
+mfree $mem
+
+fclose $fp_src
+fclose $fp_dest
+
+echo "\nAll done!"
+
+end

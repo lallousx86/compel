@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<PersonalityInfo>
+		<Option>
+			<Option Name="Personality">Default.Personality</Option>
+			<Option Name="ProjectType"></Option>
+			<Option Name="Version">1.0</Option>
+			<Option Name="GUID">{7FBC1290-198C-40F5-8DC7-F7E0F7AB28FD}</Option>
+		</Option>
+	</PersonalityInfo>
+	<Default.Personality>  <Projects>
+      <Projects Name="CompelIDE.exe">CompelIDE.bdsproj</Projects>
+      <Projects Name="compel_canvas_ext.dll">..\canvas_ext\compel_canvas_ext.bdsproj</Projects>
+      <Projects Name="Targets">CompelIDE.exe compel_canvas_ext.dll</Projects>
+    </Projects>
+    <Dependencies/>
+  </Default.Personality>
+</BorlandProject>

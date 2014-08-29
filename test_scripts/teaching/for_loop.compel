@@ -1,0 +1,14 @@
+var $i
+var $n
+
+echo "how much you want to loop? "
+inputline $n
+
+for $i 1 to $n
+{
+  echo "i=" $i "\n"
+}
+
+echo "press any key"
+getch
+end

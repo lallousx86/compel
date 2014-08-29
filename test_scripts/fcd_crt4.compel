@@ -1,0 +1,15 @@
+command outat $x $y $str
+{
+  var $fargs.sx
+  var $fargs.sy
+
+  getxy $fargs.sx $fargs.sy
+  gotoxy $fargs.x $fargs.y
+  echo $fargs.str
+  gotoxy $fargs.sx $fargs.sy
+}
+
+outat 20 20 "Hello"
+
+
+end

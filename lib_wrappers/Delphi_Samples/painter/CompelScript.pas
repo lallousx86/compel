@@ -1,0 +1,1 @@
+{$I ..\..\Delphi\CompelScript.pas}

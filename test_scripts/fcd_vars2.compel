@@ -1,0 +1,35 @@
+/*
+  This script demonstrates the assignment between variables and objects.
+
+*/
+
+var $v1 "12345"
+fopen $fp "_trash.txt"
+echo "v1=" $v1 " fp.name=" $fp.name "\n"
+echo "obj=" $fp "\n"
+
+malloc $mem 1234
+
+assign $mem $fp.name
+echo "1)mem=" $mem "\n"
+
+assign $mem "hey!"
+echo "2)mem=" $mem "\n"
+
+assign $mem ""
+assign $mem $fp.name
+echo "3)mem=" $mem "\n"
+
+assign $mem $v1
+echo "4)mem=" $v1 "\n"
+
+fread $fp $mem
+
+mfree $mem
+
+var $fp.elias "hi"
+
+echo $fp "\n"
+fclose $fp
+
+end

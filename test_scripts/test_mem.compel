@@ -1,0 +1,10 @@
+malloc $mem 100
+fopen $fp "_out.bin" "wb"
+assign $mem "\x001\x002\x003!"
+echo "mem.length=" $mem.length "\n"
+fwrite $fp $mem $mem.length
+fclose $fp
+
+echo $mem
+mfree $mem
+end

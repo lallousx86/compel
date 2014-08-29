@@ -1,0 +1,17 @@
+/*
+  access variables by reference
+
+*/
+command by_ref $arg $value
+{
+//  echo "fargs=" $fargs "\n"
+  var $fargs.arg $fargs.value
+}
+
+var $firstname
+var $lastname
+
+by_ref &$firstname "elias"
+by_ref &$lastname  "b"
+
+echo "f=" $firstname " l=" $lastname "\n"

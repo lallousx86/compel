@@ -1,0 +1,12 @@
+goto $label1
+
+goto $label2
+
+echo "hello world"
+gotoline 10
+
+label $label1
+
+echo "hey!\n"
+
+label $label2

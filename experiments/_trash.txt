@@ -1,0 +1,22 @@
+========================================================================
+  variable_t *add_variable(const char *varname, variable_t *var)
+    /*
+    switch (var.get_var_kind())
+    {
+    case variable_value:
+      sym = new value_t(*static_cast<value_t *>(&var));
+      break;
+    case variable_object:
+      {
+        // different kinds of objects!
+        object_t *obj = static_cast<object_t *>(&var);
+        switch (obj->get_obj_kind())
+        {
+        case object_base:
+          sym = new object_t(*obj);
+          break;
+        }
+      }
+    }
+    */
+========================================================================

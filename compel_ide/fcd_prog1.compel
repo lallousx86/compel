@@ -1,0 +1,133 @@
+var $c
+getch $c
+echoln "c=" $c
+end
+
+
+//compellib.dl ext "..\\Debug\\ext_dll.dll"
+compellib.dl canvas "..\\canvas_ext\\compel_canvas_ext.dll"
+
+Canvas.DrawText 0 1 "Hello"
+end
+var $i
+var $x1 0
+var $y1
+var $x2 20
+var $y2
+var $color
+var $max 20
+var $j
+var $width 10
+var $height 10
+var $shape "ect"
+
+Canvas.Create 100 100 0 0
+var $c1 $Canvas_Create
+Canvas.DrawText 0 0 "This is #1"
+
+Canvas.Create 100 100 100 100
+var $c2 $Canvas_Create
+Canvas.Select 100
+Canvas.DrawText 0 0 "This is #2"
+
+Canvas.Wait
+Canvas.Close
+end
+
+command d2d_test $shape
+{
+  if $fargs.shape == "rect"
+  {
+    alias Canvas.Rectangle d2d
+  }
+
+  if $fargs.shape == "ellipse"
+  {
+    alias Canvas.Ellipse d2d
+  }
+
+  if $fargs.shape == "circle"
+  {
+    alias Canvas.Circle d2d
+  }
+
+  var $i
+  var $x1 0
+  var $y1
+  var $x2 20
+  var $y2
+  var $color
+  var $max 20
+  var $j
+  var $width 10
+  var $height 10
+
+  randomize
+
+  Canvas.BeginPaint 1
+
+  for $j 0 to 10
+  {
+    for $i 0 to $max
+    {
+      expr $y1 $i * $height
+      expr $y2 $y1 + $height
+      rand $color
+      Canvas.SelectBkColor $color
+      d2d $x1 $y1 $x2 $y2
+    }
+
+    expr $x1 $x2
+    expr $x2 $x2 + $width
+  }
+
+  Canvas.BeginPaint 0
+}
+
+command dimension_test
+{
+  var $sx
+  var $sy
+  var $cx
+  var $cy
+
+  Canvas.Dimensions &$sx &$sy &$cx &$cy
+  Canvas.Resize $sx $sy
+}
+
+command misc_test
+{
+  Canvas.SetTitle "Haaaaa"
+  Canvas.Resize 400 400
+  Canvas.Clear 0xFF0000
+  Canvas.SelectBkColor 0x0000FF
+}
+
+command test2
+{
+  Canvas.Rectangle 20 20 50 50
+  Canvas.SelectBkColor 0x00FF00
+  Canvas.Rectangle 80 80 50 50
+  Canvas.DrawText 90 90 "Hi Elias!"
+  Canvas.Line 0 50 200 50
+}
+
+command drawtext_test
+{
+  var $font "Harlow Solid Italic"
+  Canvas.SelectBkColor 0x0000FF
+  Canvas.SelectFont $font 20 0xFF0000
+  Canvas.DrawText 0 0 $font
+
+  var $font "Eras Light ITC"
+  Canvas.SelectBkColor 0x00FF00
+  Canvas.SelectFont $font 20 0xFF0000
+  Canvas.DrawText 0 50 $font
+
+  var $font "Courier New"
+  Canvas.SelectBkColor 0xFF0000
+  Canvas.SelectFont $font 30 0x0000FF
+  Canvas.DrawText 0 80 $font
+
+}
+end

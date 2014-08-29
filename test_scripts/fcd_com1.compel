@@ -1,0 +1,14 @@
+# Create needed objects
+
+com.create $word "Word.Basic" 4
+
+if $word.ok != 1
+{
+  msgbox "could not initialize the Word control!"
+  end
+}
+
+var $word.argc 0
+com.invoke $word AppShow
+
+end

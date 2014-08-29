@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2006/05/23 14:24:36.412.pas,C:\easeb\Sources\xpro\compel\canvas_ext\Unit2.pas=C:\easeb\Sources\xpro\compel\canvas_ext\uCanvasExtShapes.pas</Transaction>
+    <Transaction>2006/05/23 16:00:47.843.pas,C:\easeb\Sources\xpro\compel\canvas_ext\Unit2.pas=C:\easeb\Sources\xpro\compel\canvas_ext\compel_canvas_ext.pas</Transaction>
+    <Transaction>2006/05/23 16:10:04.605.pas,C:\easeb\Sources\xpro\compel\canvas_ext\compel_canvas_ext.pas=C:\easeb\Sources\xpro\compel\canvas_ext\compel_canvas.pas</Transaction>
+    <Transaction>2006/05/23 16:19:10.502.pas,C:\easeb\Sources\xpro\compel\canvas_ext\Unit1.pas=C:\easeb\Sources\xpro\compel\canvas_ext\uCanvasTestForm.pas</Transaction>
+    <Transaction>2006/05/23 16:19:10.502.dfm,C:\easeb\Sources\xpro\compel\canvas_ext\Unit1.dfm=C:\easeb\Sources\xpro\compel\canvas_ext\uCanvasTestForm.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

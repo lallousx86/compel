@@ -1,0 +1,22 @@
+/*
+  access variables by reference #2
+
+*/
+
+command read_file $fp $mem
+{
+  fread $fargs.fp $fargs.mem
+}
+
+fopen $f1 "_trash.txt"
+fopen $f2 "fcd_alias1.compel"
+
+malloc $m1 100
+
+read_file &$f1 &$m1
+read_file &$f2 &$m1
+
+echo "m1=" $m1 "\n"
+
+mfree $m1
+fclose $f1

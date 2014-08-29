@@ -1,0 +1,11 @@
+var $i
+var $fn ".\fcd_ini.ini"
+var $section "general"
+
+for $i 1 to 9
+{
+  var $v count $i
+  writeini $fn $section $v $i
+}
+
+end

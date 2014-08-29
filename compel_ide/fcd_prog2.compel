@@ -1,0 +1,7 @@
+echo "include2"
+
+var $i
+for $i 0 to 10
+{
+  echo "i=" $i "\n"
+}

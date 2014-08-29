@@ -1,0 +1,4 @@
+var $i
+echo "hello world"
+ml 1 2 3 4
+mu 4 3 2 1

@@ -1,0 +1,5 @@
+command mycommand
+{
+  echo "this is mycommand\n"
+}
+

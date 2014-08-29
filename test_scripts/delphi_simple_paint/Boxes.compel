@@ -1,0 +1,14 @@
+CvClear
+CvTitle "Shapes"
+CvColor 255 0 0
+CvRect 0 0 400 400
+
+CvColor 0 255 0
+CvRect 20 20 380 380
+
+CvColor 200 255 0
+CvRect 40 40 360 360
+
+CvColor 0 0 0
+CvLine 40 40 360 360
+CvLine 40 360 360 40

@@ -1,0 +1,13 @@
+/*
+  This is a sample counting using scopes
+*/
+
+var $i 0
+{
+  label $repeat
+  add $i 1
+  echo "i=" $i "\n"
+  if_lt $i 10 $repeat
+  break
+  never reached!! what ever you want! :P
+}

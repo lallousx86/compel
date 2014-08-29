@@ -1,0 +1,15 @@
+Canvas.Create 200 200 0 0
+var $c1 $Canvas_Create
+
+Canvas.Create 200 200 400 0
+var $c2 $Canvas_Create
+
+echo "Created canvas with id=" $c1 " c2=" $c2 "\n"
+
+Canvas.SetTitle "Hey how are you?!"
+
+//Canvas.DrawText 1 2 "Hello world !"
+
+Canvas.Wait
+
+Canvas.Close

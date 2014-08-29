@@ -1,0 +1,5 @@
+LIBRARY      "compel_lib"
+
+EXPORTS
+ 
+  compel_ext_init

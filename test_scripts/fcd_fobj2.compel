@@ -1,0 +1,18 @@
+/*
+  File I/O Test 1
+
+  This sample open two files
+*/
+
+var $fn
+inputbox $fn "Enter filename to open" "File name information"
+fopen $fobj1 $fn
+
+if $fobj1.ok != 1
+{
+  echo "file '" $fn "' not found!"
+  end
+}
+
+msgbox "File opened successfully, size=" $fobj1.size " \n"
+fclose $fobj1

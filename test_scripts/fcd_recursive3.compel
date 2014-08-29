@@ -1,0 +1,37 @@
+/*
+  Factorial demonstration in a recursive manner
+*/
+# command fact(n)
+# {
+# if (n <= 1)
+#   return 1
+# return n * fact(n-1)
+# }
+
+command factorial_recursive $n
+{
+  if $fargs.n == 1
+  {
+    return 1
+  }
+
+  var $fargs.n_m1 $fargs.n
+  sub $fargs.n_m1 1
+
+  factorial_recursive $fargs.n_m1
+
+  mul $factorial_recursive $fargs.n
+}
+
+var $n
+
+inputbox $n "Enter number:"
+if $n <= 10
+{
+  factorial_recursive $n
+  msgbox "fact(" $n ")=" $factorial_recursive "\n"
+}
+else
+{
+  msgbox "Number too big will not take it!"
+}

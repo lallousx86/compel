@@ -1,0 +1,27 @@
+/*
+ Dirs and files enumeration sample
+*/
+
+var $i
+var $s
+
+enumfiles $d "c:\*.*"
+
+echo "Directories\n"
+echo "-----------\n"
+
+for $i 1 to $d.dircount
+{
+  var $s "dir" $i
+  echo $d.$s "\n"
+}
+
+echo "\n"
+echo "Files\n"
+echo "-----\n"
+
+for $i 1 to $d.filecount
+{
+  var $s "file" $i
+  echo $d.$s "\n"
+}

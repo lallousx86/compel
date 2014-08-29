@@ -1,0 +1,829 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CompelManaged</name>
+    </assembly>
+    <members>
+        <member name="T:CompelManaged.compel_errors_e">
+            <summary>
+            The Compel System Definitions
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_success">
+            <summary>
+            Success
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_symbol_undefined">
+            <summary>
+            An undefined symbol occured
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_syntax_error">
+            <summary>
+            Script syntax error
+            </summary> 
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_error_handler_continue_search">
+            <summary>
+            The error handler decided to pass the error to next handlers
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_wrong_param_count">
+            <summary>
+            Wrong parameters passed to a given command, eiter more or less commands passed
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_function_expected">
+            <summary>
+            A command call was expected
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_script_stopped">
+            <summary>
+            The script has been stoped either because it encountered END or fatal script error
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_symbol_redefined">
+            <summary>
+            Symbol was redefined
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_unknown_error">
+            <summary>
+            An unknown error occured. This should usually never occur.
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_branch_handled">
+            <summary>
+            We adjusted script line number, the engine should not advance the script line number.
+            The user command changed the source line number, thus the engine should not advance to next line.
+            This is useful if you write some sort of branching commands.
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_symbol_expected">
+            <summary>
+            A symbol rather than a constant was expected. The symbol may
+            </summary> 
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_wrong_param_value">
+            <summary>
+            A wrong parameter value was generated or passed.
+            For example, a divide by zero operation might return this value
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_no_operation">
+            <summary>
+            The instruction yields nothing because it can be:
+            - empty line
+            - void line
+            - comment line
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_errors_e.compel_error_invalid_extension">
+            <summary>
+            The extension structure is not valid!
+            </summary>
+        </member>
+        <member name="T:CompelManaged.compel_internal_e">
+            <summary>
+            COMPEL internal command codes. These codes are used with compel_internal().
+            The \a arg1 parameter can hold any of the listed values.
+            The rest of the arguments depend on the \a arg1 value
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_internal_e.compel_internal_writeraw">
+            <summary>
+            This allows you to write the prepared (processed) script lines into a file
+            arg2 can optionally point to a pointer to the raw file name.
+            It returns 0 if failure to write or 1 if write successful
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_internal_e.compel_internal_setdbgout">
+            <summary>
+            This will enable or disable the outputing of the interpreted lines.
+            arg2 can be 0 or 1 to enable or disable
+            \sa _compel_init_t b_dbgout_script
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_internal_e.compel_internal_showlines">
+            <summary>
+            This flag will allow COMPEL engine to dump all the script lines to stdout
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_internal_e.compel_internal_showsymtbl">
+            <summary>
+            This flag will allow COMPEL to dump the contents of the symbol table to stdout
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_internal_e.compel_internal_pause">
+            <summary>
+            Interrupts the execution of the script
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_internal_e.compel_internal_exectime">
+            <summary>
+            Get the execution time in milliseconds
+            </summary>
+        </member>
+        <member name="F:CompelManaged.compel_internal_e.compel_internal_preparse_failing_line">
+            <summary>
+            Returns the preparse failing line number
+            </summary>
+        </member>
+        <member name="T:CompelManaged.CommandCallback">
+            <summary>
+            This is the callback function used by the user defined commands.
+            </summary>
+        </member>
+        <member name="T:CompelManaged.ErrorHandlerCallback">
+            <summary>
+            This is the callback function used when error occurrs.
+            </summary>
+        </member>
+        <member name="T:CompelManaged._compel_init_t">
+            <summary>
+            COMPEL library initialization structure.
+            </summary>
+        </member>
+        <member name="F:CompelManaged._compel_init_t.b_usefullns">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CompelManaged._compel_init_t.b_dbgout_script">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:CompelManaged._compel_init_t.script_args">
+            <summary>
+            The arguments passed to the script.
+            You may access these arguments from the script using the $ARGS variable.
+            The $ARGS.0 value is always set to the script's file name (if loaded from a file), or to "string" if
+            the string was loaded from command line
+            </summary>
+        </member>
+        <member name="F:CompelManaged._compel_init_t.script_file">
+            <summary>
+            The script's file name.
+            If this is set, you later no need to specify the script file name in the "compel_script_load_file".
+            </summary>
+        </member>
+        <member name="F:CompelManaged._compel_init_t.extensions">
+            <summary>
+            The desired built-in extensions you want to enable in the scripting engine.
+            The extension names must be \a ; separated.
+            </summary>
+        </member>
+        <member name="T:CompelManaged._lib_usercommand_info_t">
+            <summary>
+            User command registration structure. Used when registering a user command
+            </summary>
+        </member>
+        <member name="F:CompelManaged._lib_usercommand_info_t.name">
+            <summary>
+            the name of the user function
+            </summary>
+        </member>
+        <member name="F:CompelManaged._lib_usercommand_info_t.minargs">
+            <summary>
+            min arguments of the command
+            </summary>
+        </member>
+        <member name="F:CompelManaged._lib_usercommand_info_t.maxargs">
+            <summary>
+            max arguments of the command
+            </summary>
+        </member>
+        <member name="F:CompelManaged._lib_usercommand_info_t.cb">
+            <summary>
+            the callback
+            </summary>
+        </member>
+        <member name="F:CompelManaged._lib_usercommand_info_t.desc">
+            <summary>
+            user command's description
+            </summary>
+        </member>
+        <member name="F:CompelManaged._lib_usercommand_info_t.context">
+            <summary>
+            user defined information
+            </summary>
+        </member>
+        <member name="T:CompelManaged.CompelLib">
+            <summary>
+            Provides the P-Invoke Managed interface that interacts with the Compel Engine
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_avail_extensions">
+            <summary>
+            compel_script_avail_extensions
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_init(CompelManaged._compel_init_t@)">
+            <summary>
+            Initializes the scripting engine.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_deinit(System.IntPtr)">
+            <summary>
+            Deinitializes and frees the scripting engine
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_interpret_line(System.IntPtr,System.String)">
+            <summary>
+            Executes the user's line.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_clear_lines(System.IntPtr)">
+            <summary>
+            Clears script lines
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_value_find(System.IntPtr,System.String)">
+            <summary>
+            finds a value by name
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_set_lineno(System.IntPtr,System.Int32)">
+            <summary>
+            Sets the script's line number
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_value_get(System.IntPtr,System.IntPtr)">
+            <summary>
+            Returns a variable's value
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_value_value_get(System.IntPtr,System.String)">
+            <summary>
+            Returns a compel_value_t's value by variable name
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_value_set(System.IntPtr,System.IntPtr,System.String)">
+            <summary>
+            updates a value_t's value
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_value_create(System.IntPtr,System.String,System.String)">
+            <summary>
+            Creates a variable
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_internal(System.IntPtr,System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Issues an internal command to COMPEL engine.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_load_lines(System.IntPtr,System.String,System.String)">
+            <summary>
+            Loads a script from a string, separated by the delim
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_load_file(System.IntPtr,System.String)">
+            <summary>
+            Loads a script from a string, separated by the delim
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_run(System.IntPtr)">
+            <summary>
+            Runs the whole script.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_object_create(System.IntPtr,System.String)">
+            <summary>
+            Creates an object.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_object_add_attr(System.IntPtr,System.IntPtr,System.String,System.String)">
+            <summary>
+            Adds an attribute to an object
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_object_destroy(System.IntPtr,System.String)">
+            <summary>
+            Destroys an object
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_object_find(System.IntPtr,System.String)">
+            <summary>
+            Finds an object by name
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_object_find_attr(System.IntPtr,System.IntPtr,System.String)">
+            <summary>
+            Finds an attribute within an object
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_object_remove_attr(System.IntPtr,System.IntPtr,System.String)">
+            <summary>
+            Removes an attribute from an object
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_lu_cmd_register(System.IntPtr,CompelManaged._lib_usercommand_info_t@)">
+            <summary>
+            Registers a user command
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_lu_cmd_register2(System.IntPtr,CompelManaged.CommandCallback,System.String,System.UInt32,System.UInt32)">
+            <summary>
+            Registers user's command without using the usercommand_info_t structure.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_lu_cmd_set_retval(System.IntPtr,System.String)">
+            <summary>
+            Allows a user's command to return a value.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_tokenize_init(System.String,System.String,System.String,System.String)">
+            <summary>
+            Creates a string tokenizer object.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_tokenize_free(System.IntPtr)">
+            <summary>
+            Creates a string tokenizer object.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_tokenize_parsed_count(System.IntPtr)">
+            <summary>
+            Creates a string tokenizer object.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_tokenize_parse(System.IntPtr,System.String,System.String,System.String,System.String)">
+            <summary>
+            Re-tokenizes a string
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_tokenize_get(System.IntPtr,System.UInt32)">
+            <summary>
+            Returns a tokenized string at the given index
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_tokenize_set(System.IntPtr,System.UInt32,System.String)">
+            <summary>
+            Patches a tokenized string value at the index.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_set_error_handler(System.IntPtr,CompelManaged.ErrorHandlerCallback)">
+            <summary>
+            Sets scripting error handler.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_script_get_line(System.IntPtr,System.UInt32)">
+            <summary>
+            Retrieves the source line value
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.compel_lu_cmd_get_info(System.IntPtr)">
+            <summary>
+            Retrieves the source line value
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelLib.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:CompelManaged.CompelObject">
+            <summary>
+            Provides methods for accessing a script object
+            </summary>
+        </member>
+        <member name="T:CompelManaged.CompelVariable">
+            <summary>
+            Provides methods for accessing a script value
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelVariable.val">
+            <summary>
+            the handle of the variable
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelVariable.script">
+            <summary>
+            the script handle to which this variable belongs
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelVariable.name">
+            <summary>
+            the variable name
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelVariable.varVal">
+            <summary>
+            the variable value
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelVariable.#ctor(System.IntPtr,System.IntPtr,System.String)">
+            <summary>
+            Initializes a new instance of the CompelVariable class.
+            </summary>
+            <param name="script">the script handle to which this variable belongs</param>
+            <param name="val">the handle of the variable</param>
+            <param name="name">the variable name</param>
+        </member>
+        <member name="P:CompelManaged.CompelVariable.Handle">
+            <summary>
+            Gets the designated variable handle.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelObject.#ctor(System.IntPtr,System.IntPtr,System.String)">
+            <summary>
+            Initializes a new instance of the CompelValue class.
+            </summary>
+            <param name="script">the script handle to which this object belongs</param>
+            <param name="obj">the handle of the object</param>
+            <param name="name">the object name</param>
+        </member>
+        <member name="M:CompelManaged.CompelObject.Finalize">
+            <summary>
+            Disposes the CompelObject object
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelObject.Dispose">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelObject.AddAttribute(System.String,System.String)">
+            <summary>
+            Creates a new attribute in the designated object
+            </summary>
+            <param name="attributeName">the name of the attribute</param>
+            <param name="attributeValue">the value of the attribute</param>
+            <returns>the newly created attribute</returns>
+        </member>
+        <member name="M:CompelManaged.CompelObject.FindAttribute(System.String)">
+            <summary>
+            Finds an attribute within the object
+            </summary>
+            <param name="attributeName">the name of the attribute to find</param>
+            <returns>the found attribute</returns>
+        </member>
+        <member name="M:CompelManaged.CompelObject.RemoveAttribute(System.String)">
+            <summary>
+            Removes an attribute from the object
+            </summary>
+            <param name="attributeName">the name of the attribute to remove</param>
+            <returns>true if attribute removed successfully else false</returns>
+        </member>
+        <member name="T:CompelManaged.CompelObjectAttribute">
+            <summary>
+            Provides methods for accessing a script Object Attribute
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelObjectAttribute.#ctor(System.IntPtr,System.IntPtr,System.String)">
+            <summary>
+            Initializes a new instance of the CompelObjectAttribute class.
+            </summary>
+            <param name="script">the script handle to which this variable belongs</param>
+            <param name="val">the handle of the variable</param>
+            <param name="name">the variable name</param>
+        </member>
+        <member name="P:CompelManaged.CompelObjectAttribute.Name">
+            <summary>
+            Gets the designated attribute name.
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelObjectAttribute.Value">
+            <summary>
+            Gets or Sets the designated attribute value.
+            </summary>
+        </member>
+        <member name="T:CompelManaged.UserCommandCB">
+            <summary>
+            Represents the method that will handle the ErrorOccurred Event
+            </summary>
+        </member>
+        <member name="T:CompelManaged.CompelException">
+            <summary>
+            Provides exception handling for the Compel Library
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the CompelException class.
+            </summary>
+            <param name="exceptionMessage">the exception message value</param>
+        </member>
+        <member name="T:CompelManaged.ErrorEventArgs">
+            <summary>
+            Provides data for the ErrorOccurred Event
+            </summary>
+        </member>
+        <member name="F:CompelManaged.ErrorEventArgs.libErr">
+            <summary>
+            the error number
+            </summary>
+        </member>
+        <member name="F:CompelManaged.ErrorEventArgs.lineNum">
+            <summary>
+            the line number where the error occurred
+            </summary>
+        </member>
+        <member name="F:CompelManaged.ErrorEventArgs.faultyCode">
+            <summary>
+            the line of code
+            </summary>
+        </member>
+        <member name="M:CompelManaged.ErrorEventArgs.#ctor(System.Int32,System.Int32,System.String)">
+            <summary>
+            Initializes a new instance of the ErrorEventArgs class.
+            </summary>
+            <param name="libErr">the error number</param>
+            <param name="lineNum">the line number where the error occurred</param>
+            <param name="faultyCode">the line of code</param>
+        </member>
+        <member name="P:CompelManaged.ErrorEventArgs.ErrorNumber">
+            <summary>
+            Gets the error number
+            </summary>
+        </member>
+        <member name="P:CompelManaged.ErrorEventArgs.LineNumber">
+            <summary>
+            Gets the Line number where the error occurred
+            </summary>
+        </member>
+        <member name="P:CompelManaged.ErrorEventArgs.FaultyCode">
+            <summary>
+            Gets the line of code where the error occurred
+            </summary>
+        </member>
+        <member name="T:CompelManaged.ErrorEventHandler">
+            <summary>
+            Represents the method that will handle the ErrorOccurred Event
+            </summary>
+        </member>
+        <member name="T:CompelManaged.CompelScript">
+            <summary>
+            Provides methods for accessing and manipulating a Compel script
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelScript.script">
+            <summary>
+            The script handle
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelScript.cbList">
+            <summary>
+            The script handle
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelScript.#ctor">
+            <summary>
+            Initializes a new instance of the CompelScript class.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelScript.Finalize">
+            <summary>
+            Disposes the CompelScript object
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelScript.#ctor(System.IntPtr)">
+            <summary>
+            Initializes a new instance of the CompelScript class.
+            </summary>
+            <param name="scriptHandle">the handle to an available script</param>
+        </member>
+        <member name="M:CompelManaged.CompelScript.Dispose">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelScript.InitializeScript">
+            <summary>
+            Initializes a new script
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelScript.ScriptErrorHandler(System.IntPtr,System.UInt32,System.Int32)">
+            <summary>
+            Callback method that handles all script errors
+            </summary>
+            <param name="compel_script">the script handle</param>
+            <param name="lineno">the line number wher the error occurred</param>
+            <param name="err">the error number</param>
+            <returns>compel_error_success if successful</returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.GetStringArrFromPtr(System.IntPtr,System.Int32)">
+            <summary>
+            Retrieve unmanaged allocated string[] from address
+            </summary>
+            <param name="args"></param>
+            <param name="argNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.ComandCallBack(System.IntPtr,System.Int32,System.IntPtr)">
+            <summary>
+            Method handling the user command callbacks
+            </summary>
+            <param name="compel_script_t">the script handle</param>
+            <param name="argc">the number of arguments</param>
+            <param name="argv">the arguments provided</param>
+            <returns>the resulting error value</returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.InterpretLine(System.String)">
+            <summary>
+            Interprets a line of script
+            </summary>
+            <param name="scriptLine">the line to interpret</param>
+        </member>
+        <member name="M:CompelManaged.CompelScript.LoadLines(System.String,System.String)">
+            <summary>
+            Loads deimiter seperated lines of script
+            </summary>
+            <param name="scriptLines">the line to load</param>
+            <param name="delimiter">the seperator string being used</param>
+        </member>
+        <member name="M:CompelManaged.CompelScript.LoadFile(System.String)">
+            <summary>
+            Loads deimiter seperated lines of script
+            </summary>
+            <param name="filename">the file name to load</param>
+        </member>
+        <member name="M:CompelManaged.CompelScript.FindVariable(System.String)">
+            <summary>
+            Finds a variable within the script
+            </summary>
+            <param name="variableName">the name of the variable to find</param>
+            <returns>the found variable</returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.SetReturnValue(System.String)">
+            <summary>
+            Sets the user command return value
+            </summary>
+            <param name="retVal">the return value</param>
+            <returns>true if successful else false</returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.CreateVariable(System.String,System.String)">
+            <summary>
+            Creates a new variable in the designated script
+            </summary>
+            <param name="variableName">the name of the variable</param>
+            <param name="variableValue">the value of the variable</param>
+            <returns>the newly created variable</returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.CreateObject(System.String)">
+            <summary>
+            Creates a new object in the designated script
+            </summary>
+            <param name="objectName">the name of the object</param>
+            <returns>the newly created object</returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.FindObject(System.String)">
+            <summary>
+            Finds an object within the script
+            </summary>
+            <param name="objectName">the name of the object to find</param>
+            <returns>the found object</returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.CreateUserCommand(System.String,System.Int32,System.Int32,CompelManaged.UserCommandCB)">
+            <summary>
+            Creates a custom user command in the designated script
+            </summary>
+            <param name="commandName">the command name</param>
+            <param name="argMin">the minimum number of arguments for the command</param>
+            <param name="argMax">the maximum number of arguments for the command</param>
+            <param name="cmdCB">the callback funtion that is called</param>
+            <returns>the resulting value of creating the user command</returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.ClearLines">
+            <summary>
+            Clear script lines
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelScript.SetLineNo(System.Int32)">
+            <summary>
+            Sets the script executing line
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelScript.Run">
+            <summary>
+            Run the currently loaded script
+            </summary>
+            <returns>the resulting error value</returns>
+        </member>
+        <member name="M:CompelManaged.CompelScript.Pause">
+            <summary>
+            Run the currently loaded script
+            </summary>
+            <returns>the resulting error value</returns>
+        </member>
+        <member name="E:CompelManaged.CompelScript.ErrorOccurred">
+            <summary>
+            Occurs when an error is found in the script
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelScript.ScriptHandle">
+            <summary>
+            Gets the designated variable handle.
+            </summary>
+        </member>
+        <member name="T:CompelManaged.CompelTokenizer">
+            <summary>
+            Provides methods for tokenizing strings using the Compel Library
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelTokenizer.tok">
+            <summary>
+            the handle of the tokenizer
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelTokenizer.inputStr">
+            <summary>
+            The input string
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelTokenizer.delimiter">
+            <summary>
+            The delimiters
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelTokenizer.quote">
+            <summary>
+            The quote character
+            </summary>
+        </member>
+        <member name="F:CompelManaged.CompelTokenizer.escape">
+            <summary>
+            The escape characters
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelTokenizer.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the CompelTokenizer class.
+            </summary>
+            <param name="inputStr">The input string</param>
+            <param name="delimiter">The delimiters</param>
+        </member>
+        <member name="M:CompelManaged.CompelTokenizer.Finalize">
+            <summary>
+            Disposes the CompelObject object
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelTokenizer.Dispose">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelTokenizer.Count">
+            <summary>
+            Gets the number of elements after being tokenized
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelTokenizer.Delimiter">
+            <summary>
+            Gets or Sets the delimiter
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelTokenizer.Quote">
+            <summary>
+            Gets or Sets the Quote character
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelTokenizer.Escape">
+            <summary>
+            Gets or Sets the escape character
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelTokenizer.InputString">
+            <summary>
+            Gets or Sets the input string
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelTokenizer.Item(System.Int32)">
+            <summary>
+            returns the value at the index
+            </summary>
+        </member>
+        <member name="T:CompelManaged.CompelValue">
+            <summary>
+            Provides methods for accessing a script variable value
+            </summary>
+        </member>
+        <member name="M:CompelManaged.CompelValue.#ctor(System.IntPtr,System.IntPtr,System.String)">
+            <summary>
+            Initializes a new instance of the CompelValue class.
+            </summary>
+            <param name="script">the script handle to which this variable belongs</param>
+            <param name="val">the handle of the variable</param>
+            <param name="name">the variable name</param>
+        </member>
+        <member name="M:CompelManaged.CompelValue.PrintValue">
+            <summary>
+            Prints to the console the variable value
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelValue.Name">
+            <summary>
+            Gets the designated variable name.
+            </summary>
+        </member>
+        <member name="P:CompelManaged.CompelValue.Value">
+            <summary>
+            Gets or Sets the designated variable value.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,1 @@
+This extension uses DSHOW

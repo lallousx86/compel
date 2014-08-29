@@ -1,0 +1,10 @@
+# demo to show how to tokenize string using a delimiter
+tokenize $tok "hello world" " "
+var $i
+
+for $i 1 to $tok.count
+{
+  echo $i " = >" $tok.$i "<\n"
+}
+
+end

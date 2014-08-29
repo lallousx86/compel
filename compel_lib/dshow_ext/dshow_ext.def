@@ -1,0 +1,5 @@
+LIBRARY      "dshow_ext"
+
+EXPORTS
+ 
+  compel_ext_init

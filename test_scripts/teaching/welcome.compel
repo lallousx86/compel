@@ -1,0 +1,35 @@
+var $name
+var $gender
+var $mstatus
+
+inputbox $name "What is your name?" "Enter information"
+
+yesnobox $gender "Are you a male?" "Gender"
+
+if $gender != 1
+{
+  yesnobox $mstatus "Are you married" "Martial Status"
+}
+
+// Is it a male?
+if $gender == 1
+{
+  var $gender "Mr."
+}
+// Female?
+else
+{
+  // Is she married?
+  if $mstatus == 1
+  {
+    var $gender "Mrs."
+  }
+  else
+  {
+    var $gender "Ms."
+  }
+}
+
+msgbox "Welcome " $gender " " $name
+
+end

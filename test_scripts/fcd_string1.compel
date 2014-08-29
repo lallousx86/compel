@@ -1,0 +1,8 @@
+# demo to show how to compute string length
+var $len
+var $s
+
+echo "Enter a string:" $s
+inputline $s
+strlen $len $s
+echo "The length is:" $len "\n"

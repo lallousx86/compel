@@ -1,0 +1,26 @@
+/*
+  Arithmetics test program #1
+*/
+
+var $a 4
+var $b 2
+var $c 0
+
+var $ob.
+
+# c = c + a
+add $c $a
+
+# c = c + b
+add $c $b
+
+# c = 1
+assign $c 1
+
+# c = c * a
+mul $c $a
+
+# c = c * b
+mul $c $b
+
+end

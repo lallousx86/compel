@@ -1,0 +1,12 @@
+/*
+  COMPEL passed argments tests
+
+  run with -args "1 2 3 4 5" or anything like that to pass arguments
+*/
+
+var $i 0
+sub $args.count 1
+for $i 0 to $args.count
+{
+  echo "@[" $i "]=" $args.$i "\n"
+}

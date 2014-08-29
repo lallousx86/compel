@@ -1,0 +1,26 @@
+# Welcome to COMPEL
+
+var $var
+var $obj.
+
+var $obj.age 18
+var $obj.name "Roland"
+
+echo "age is:" $obj.age "\n"
+
+test1
+
+end
+
+if 1 == 1
+{
+
+}
+else
+{
+}
+command test1
+{
+  echo "this is function test1\n"
+}
+

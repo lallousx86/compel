@@ -1,0 +1,10 @@
+==fnc_include.cpp!prepare()=============================================
+      // multiple file inclusion:
+      for (size_t i=1;i<pcount;i++)
+      {
+        lines_t inc_file;
+        if (!inc_file.read_from_file(slp.GetString(i)))
+          return parse_error_file_not_found;
+        lineno = lines_class.merge_lines(inc_file, lineno);
+      }
+========================================================================

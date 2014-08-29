@@ -1,0 +1,13 @@
+/*
+  This is a sample counting program.
+  It will count from 1 to 10
+*/
+
+var $i 0
+label $repeat
+  add $i 1
+  echo "i=" $i "\n"
+  if_lt $i 10 $repeat
+
+echo "Finished!\n"
+end

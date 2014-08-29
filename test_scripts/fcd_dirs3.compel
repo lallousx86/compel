@@ -1,0 +1,33 @@
+/*
+ Dirs and files existance checks
+*/
+
+command exists $name $bool
+{
+  echo $fargs.name " "
+
+  if $fargs.bool == 1
+  {
+    echo "exists"
+  }
+  else
+  {
+    echo "does not exist"
+  }
+  echo "\n"
+}
+
+var $i
+var $r
+
+var $name "c:\_todo.txt"
+fileexists $r $name
+
+exists $name $r
+
+var $name "c:\windows"
+direxists $r $name
+exists $name $r
+
+getdir $r
+echo "current directory = >" $r "<\n"

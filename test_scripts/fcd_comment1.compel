@@ -1,0 +1,27 @@
+/*
+  Comment styles
+*/
+
+#commnet hash
+  # comment hash proper
+        //fwd comment
+
+// fwd comment proper
+
+/*comment_begin_end*/
+
+/* comment_begin_end proper*/
+
+echo "2\n"
+
+/*comment_begin
+adsadsa
+end*/
+
+echo "1\n"
+
+/* comment_begin
+proper
+end*/
+
+echo "3\n"

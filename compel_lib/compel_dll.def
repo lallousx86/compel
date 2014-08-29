@@ -1,0 +1,67 @@
+LIBRARY      "compel_lib"
+
+EXPORTS
+ 
+ ; string
+ compel_string_create
+ compel_string_destroy
+ 
+ ; libuser
+ compel_lu_cmd_register
+ compel_lu_cmd_register2
+ compel_lu_cmd_set_retval
+ compel_lu_cmd_get_info 
+
+ ; object
+ compel_object_add_attr
+ compel_object_create
+ compel_object_destroy
+ compel_object_find
+ compel_object_find_attr
+ compel_object_remove_attr
+ compel_object_to_string
+ 
+ ; misc
+ compel_parse_number
+ compel_error_code_to_string
+ compel_internal
+  
+ ; script
+ compel_script_avail_extensions
+ compel_script_clear_lines
+ compel_script_context_get
+ compel_script_context_set
+ compel_script_deinit
+ compel_script_get_lineno
+ compel_script_get_lines_count
+ compel_script_get_line
+ compel_script_init
+ compel_script_interpret_line
+ compel_script_load_file
+ compel_script_load_lines
+ compel_script_run
+ compel_script_set_error_handler
+ compel_script_set_lineno
+ compel_script_set_line
+ compel_script_step
+ compel_script_evaluate_expression
+ 
+ ; tokenizer
+ compel_tokenize_free
+ compel_tokenize_get
+ compel_tokenize_init
+ compel_tokenize_parse
+ compel_tokenize_parsed_count
+ compel_tokenize_set
+ 
+ ; value
+ compel_value_create
+ compel_value_destroy
+ compel_value_find
+ compel_value_get
+ compel_value_set
+ compel_value_value_get
+ compel_value_value_set
+
+ ; extension
+ compel_extension_load

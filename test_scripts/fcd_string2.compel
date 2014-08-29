@@ -1,0 +1,17 @@
+# demo to show how to split a string into characters
+
+var $i
+var $s
+
+echo "enter a string:"
+inputline $s
+tokenize $tok $s
+
+for $i 1 to $tok.count
+{
+  echo "character #" $i "=" $tok.$i "\n"
+}
+
+getch
+
+end

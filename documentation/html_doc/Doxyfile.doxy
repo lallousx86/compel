@@ -1,0 +1,22 @@
+PROJECT_NAME       = "COMPEL DLL documentation"
+OUTPUT_DIRECTORY   = lib_doc
+GENERATE_LATEX     = NO
+GENERATE_MAN       = NO
+GENERATE_RTF       = NO
+CASE_SENSE_NAMES   = NO
+INPUT              = ..\..\compel_lib\compel_lib.h index.dox compel_lib.dox compel_lib_examples.dox
+
+QUIET              = YES
+INTERNAL_DOCS      = YES
+GENERATE_HTMLHELP  = YES
+FULL_PATH_NAMES    = NO
+EXAMPLE_PATH       = .
+
+#EXAMPLE_PATH       = ..\..\compel_lib\dll_test\example_error_handler.cpp
+#example_error_handler.cpp
+#example_initialize.cpp
+#example_object.cpp
+#example_run_script.cpp
+#example_tokenizer.cpp
+#example_user_command.cpp
+#example_value.cpp

@@ -1,0 +1,21 @@
+/*
+  Date / Time / Random numbers test
+*/
+
+var $r
+var $i
+var $gtc
+var $dt.
+
+randomize
+
+for $i 0 to 10
+{
+  rand $r
+  gettickcount $gtc
+  echo "i=" $i " r=" $r " gtc=" $gtc "\n"
+}
+
+// get date and time
+getdatetime $dt
+msgbox $dt "\n"

@@ -1,0 +1,118 @@
+Scope #1
+----------
+{@1
+  echo "Hello"
+  {@2
+    echo "Hey!"
+    break 2
+    echo "never reached!"
+  }@2
+}@1
+
+
+Scope #2
+----------
+if x op y scope_1 scope_2 after_scope
+{@1
+  echo "hello"
+}@1
+else
+{@2
+  echo "else!"
+}@2
+label after_scope
+
+-- this code --
+if x1 op y1
+{
+  echo "x1 op y1"
+}
+else
+{
+  echo "x1 !op y1"
+  if x2 op y2
+  {
+    echo "x2 op y2"
+  }
+  else
+  {
+    echo "x2 !op y2"
+  }
+}
+-- becomes (step 1) --
+if x1 op y1 scope_1 scope_2 after_1_2
+{@1
+  echo "x1 op y1"
+}@1
+else
+{@2
+  echo "x1 !op y1"
+  if x2 op y2 scope_3 scope_4 after_3_4
+  {@3
+    echo "x2 op y2"
+  }@3
+  else
+  {@4
+    echo "x2 !op y2"
+  }@4
+  label after_3_4
+}@2
+label after_1_2
+
+-- becomes (step 2) --
+if x1 op y1 scope_1 scope_2
+{@1
+  echo "x1 op y1"
+}@1 after_1_2
+else
+{@2
+  echo "x1 !op y1"
+  if x2 op y2 scope_3 scope_4
+  {@3
+    echo "x2 op y2"
+  }@3 after_3_4
+  else
+  {@4
+    echo "x2 !op y2"
+  }@4
+  label after_3_4
+}@2
+label after_1_2
+
+Variables
+-----------
+All variables start with a "$", example: $var1
+The variable always contains a string.
+However the string is casted to a number if needed.
+
+Example:
+declare $var1
+assign $var1 "1234"
+add $var1 "1" <-- "1" will be converted to a string along with $var1 if it was a number
+
+Objects
+-----------
+All objects have variable naming convention, however their attributes are accessed via:
+$xyz.attr
+
+Memory object
+---------------
+$mobj <- use in functions
+$mobj.size <- returns the length
+
+Commands
+==============
+
+Variables and objects
+------------------------
+
+File I/O
+-----------
+[future] openprocess $fvar_name flags
+
+reada $fvar_name $mvar_name pos len
+writea $fvar_name $mvar_name pos len
+
+qwrite file_name $mvar_name [len] <- writes the [whole] buffer into the file
+qread file_name $mvar_name [len] <- reads the file into buffer
+

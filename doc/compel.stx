@@ -1,0 +1,82 @@
+; 03/27/2006, 11:09 AM
+#TITLE=COMPEL
+#DELIMITER=,(){}[]-+*%/="'~!&|<>?:;.#
+#QUOTATION1="
+#CONTINUE_QUOTE=n
+#NUMBER_PATTERN=cpp
+#LINECOMMENT=//
+#LINECOMMENT2=#
+#COMMENTON=/*
+#COMMENTOFF=*/
+#ESCAPE=\
+#CASE=n
+#PREFIX3=$
+
+#KEYWORD=Reserved words
+deferred
+
+#KEYWORD=All commands
+
+; memory i/o
+malloc
+mfree
+
+label
+goto
+gotoline
+if_eq
+if_neq
+if_lt
+if_lte
+if_gt
+if_gte
+end
+
+include
+
+; scope functions
+command
+return
+break
+continue
+for
+if
+else
+
+; variable assignment
+var
+unvar
+assign
+alias
+
+; file i/o
+fopen
+fread
+fwrite
+fclose
+fseek
+
+; arith
+add
+sub
+mul
+div
+expr
+
+; crt
+echo
+inputbox
+msgbox
+delay
+getch
+inputline
+dbgout
+gotoxy
+textattr
+clrscr
+
+; shell
+shell
+
+$
+#

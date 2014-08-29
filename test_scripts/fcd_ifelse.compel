@@ -1,0 +1,29 @@
+var $i 1
+var $j 3
+var $l 4
+
+if $i == 1
+{
+  echo "i is one!\n"
+  if $j == 3
+  {
+    echo "j - true\n"
+
+    if $l != 1
+    {
+      echo "i=true,j=true, l=true\n"
+    }
+  }
+  else
+  {
+    echo "j - else\n"
+  }
+  if 4 == $l
+  {
+    echo "l - true\n"
+  }
+}
+else
+{
+  echo "i - else\n"
+}

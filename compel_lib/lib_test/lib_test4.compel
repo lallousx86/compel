@@ -1,0 +1,10 @@
+mycommand
+
+command mycommand2
+{
+  echo "this is mycommand2\n"
+}
+
+include "lib_test1.compel"
+
+mycommand2

@@ -1,0 +1,22 @@
+/*
+  mem function test #1
+*/
+
+# allocate memory
+malloc $mo1 1024
+
+# free memory object
+mfree $mo1
+
+
+# alloc memory object with initialized value
+
+malloc $mem 1024 "!"
+
+# show the memory
+echo $mem "\n"
+
+echo "ptr: " $mem.ptr "\n"
+echo "size: " $mem.size "\n"
+
+mfree $mem

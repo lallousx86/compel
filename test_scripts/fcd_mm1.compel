@@ -1,0 +1,13 @@
+# wave file player
+
+# the supported flags are:
+# ---------------------------
+# loop | wait | nowait | stop
+#
+
+playwave loop "h:\1.wav"
+echo "press any key to stop playing\n"
+getch
+playwave stop "h:\1.wav"
+echo "stopped...\n"
+end

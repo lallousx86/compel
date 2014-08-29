@@ -1,0 +1,6 @@
+/*
+  This is a simple file to be included by the inclue test
+*/
+echo "line1 1\n"
+echo "line1 2\n"
+echo "line1 3\n"

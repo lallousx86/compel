@@ -1,0 +1,48 @@
+/*
+  Stack creation example
+
+*/
+command dumpobj $obj
+{
+  echo "---------\n"
+  echo $fargs.obj "\n"
+  echo "---------\n"
+}
+
+command stack_push $obj $val
+{
+  var $stack_push "$" $fargs.obj
+  add $stack_push.count 1
+  var $stack_push.$stack_push.count $fargs.val
+}
+
+command stack_pop $obj
+{
+  var $stack_pop "$" $fargs.obj
+  if $stack_pop.count == 0
+  {
+    unvar $stack_pop
+    var $stack_pop ""
+    return
+  }
+  var $fargs.val $stack_pop.$stack_pop.count
+  sub $stack_pop.count 1
+  unvar $stack_pop
+  var $stack_pop $fargs.val
+}
+
+var $o.
+var $o.count 0
+var $i
+var $s
+for $i 1 to 10
+{
+  var $s "element " $i
+  stack_push @$o $s
+}
+
+for $i 1 to $o.count
+{
+  stack_pop @$o
+  echo "popped #" $i " = " $stack_pop "\n"
+}

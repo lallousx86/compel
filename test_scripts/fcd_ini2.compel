@@ -1,0 +1,10 @@
+var $i
+var $fn ".\fcd_ini.ini"
+var $section "general"
+var $key "count"
+
+readini $fn $section $key $i
+expr $i $i + 1
+writeini $fn $section $key $i
+
+end

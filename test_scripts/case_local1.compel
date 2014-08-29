@@ -1,0 +1,36 @@
+/*
+  Case demonstrating the correct preservation of the $fargs local variable when we call user commands
+*/
+
+command call2
+{
+  echo "call2 called\n"
+}
+
+command call1
+{
+  var $fargs.i
+  var $fargs.elias 0
+  for $fargs.i 0 to 10
+  {
+    echo "i=" $fargs.i "\n"
+    add $fargs.elias 1
+    echo $fargs "\n"
+    call2
+    echo $fargs "\n"
+  }
+}
+
+command call3
+{
+  var $fargs.i 0
+  {
+    add $fargs.i 1
+    echo "i=" $fargs.i "\n"
+    if_eq $fargs.i 5 break
+    call2
+    continue
+  }
+}
+
+call3

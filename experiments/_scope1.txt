@@ -1,0 +1,62 @@
+-- original code --
+if x op y
+{
+  echo "Hello"
+  if x op y
+  {
+    break
+  }
+  else
+  {
+    var $i 0
+    echo "i=" $i "\n"
+    if_neq i 2 $L1
+  }
+}
+else
+{
+  echo "else!\n"
+  if x op y
+  {
+    var $i 0
+    add $i 1
+    if_eq $i 5 $stop
+    continue
+    label $stop
+  }
+}
+
+
+--
+if OPR1 op OPR2 [scope_else|scope_none] label_after_scopes
+
+-- becomes --
+if x op y sc4
+{ sc1
+  echo "Hello"
+  if x op y sc3
+  { sc2
+    break
+  } sc2	after_2_3
+  @else
+  { sc3
+    var $i 0
+    echo "i=" $i "\n"
+    if_neq i 2 $L1
+  } sc3	after_2_3
+  @after_2_3
+} sc1 after_1_4
+else
+{ sc4
+  echo "else!\n"
+  if x op y sc_none after_5
+  { sc5
+    var $i 0
+    add $i 1
+    if_eq $i 5 $stop
+    continue sc5
+    label $stop
+  } sc5
+  @after_5
+} sc4
+@after_1_4

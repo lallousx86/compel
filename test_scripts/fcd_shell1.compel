@@ -1,0 +1,49 @@
+/*
+  Date / Time / Thread demonstration
+
+  You should run this sample with the following switches:
+  -shell -i
+  That is shell enabled and interactive mode.
+
+  Before quiting the shell type "quit" then exit interactive mode normally as you do.
+
+*/
+
+// show date time thread procedure
+command showdt
+{
+  // infinite loop
+  {
+    // get date time
+    getdatetime $date
+
+    // form the date
+    var $datestr $date.hour ":" $date.minute ":" $date.second
+
+    // display it
+    echoxy 73 1 $datestr
+
+    // wait a little bit
+    delay 500
+
+    // thread signal to exit?
+    if_eq $exit_dt_thread 1 break
+
+    // loop
+    continue
+  }
+}
+
+var $datestr
+var $date.
+var $exit_dt_thread 0
+var $dt_thread
+
+command quit
+{
+  var $exit_dt_thread 1
+  thread.wait $dt_thread
+  echo "bye!"
+}
+
+thread.create $dt_thread showdt 

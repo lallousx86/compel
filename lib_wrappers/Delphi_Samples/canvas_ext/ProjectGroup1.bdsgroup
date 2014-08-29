@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+  <PersonalityInfo>
+    <Option>
+      <Option Name="Personality">Default.Personality</Option>
+      <Option Name="ProjectType"></Option>
+      <Option Name="Version">1.0</Option>
+      <Option Name="GUID">{2F308BC5-D75A-4A60-81A5-1BC59F992844}</Option>
+    </Option>
+  </PersonalityInfo>
+  <Default.Personality>
+    
+    
+    
+    <Projects>
+      <Projects Name="pCanvasTest.exe">pCanvasTest.bdsproj</Projects>
+      <Projects Name="compel_canvas_ext.dll">compel_canvas_ext.bdsproj</Projects>
+      <Projects Name="ext_test.exe">ext_test.bdsproj</Projects>
+      <Projects Name="Targets">pCanvasTest.exe compel_canvas_ext.dll ext_test.exe</Projects>
+    </Projects>
+    <Dependencies/>
+  </Default.Personality>
+</BorlandProject>

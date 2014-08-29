@@ -1,0 +1,25 @@
+/*
+  CRT functions test #1
+*/
+
+# echo test
+echo "echo: Hello\n"
+
+echo "getch: press any key"
+getch
+echo "\n"
+
+# delay test
+echo "delay: 2000ms"
+delay 2000
+echo ".\n"
+
+# input line test
+var $name
+echo "enter name:"
+inputline $name
+
+echo "you typed: " $name "\n"
+
+# end
+getch

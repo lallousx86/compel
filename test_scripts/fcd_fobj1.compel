@@ -1,0 +1,20 @@
+/*
+  File I/O Test 1
+
+  This sample open two files
+*/
+
+# open file for reading
+fopen "_trash.txt" $file1
+echo "name=" $file1.name " size=" $file1.size \n
+
+# open file for writing
+fopen "ballout.txt" $file2 "w"
+fclose $file2
+
+# close FILE1
+fclose $file1
+
+# open file again
+fopen "_trash.txt" $file1
+fclose $file1

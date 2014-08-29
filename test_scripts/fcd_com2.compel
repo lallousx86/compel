@@ -1,0 +1,62 @@
+# Create needed objects
+
+com.create $auto "AutoItX.Control"
+
+if $auto.ok != 1
+{
+  msgbox "could not initialize the AutoX control!"
+  end
+}
+
+com.create $speak "SAPI.SpVoice"
+
+if $speak.ok != 1
+{
+  msgbox "could not initialize the Speech SPVoice control!"
+  end
+}
+
+mouse_move 0 0
+
+speaktext "Hello world!"
+
+speakcount 5 9 100
+
+com.free $auto
+com.free $speak
+
+end
+
+command mouse_move $x $y
+{
+  var $auto.argc 2
+  var $auto.callsig "ii"
+  var $auto.0 $fargs.x
+  var $auto.1 $fargs.y
+  com.invoke $auto "MouseMove"
+}
+
+command speaktext $text
+{
+  var $speak.argc 2
+  var $speak.callsig "si"
+  var $speak.0 $fargs.text
+  var $speak.1 2
+  com.invoke $speak "Speak"
+}
+
+command speakcount $n1 $n2 $delay
+{
+  var $speak.argc 2
+  var $speak.callsig "si"
+  var $speak.1 2
+  var $fargs.i
+
+  for $fargs.i $fargs.n1 to $fargs.n2
+  {
+    var $speak.0 $fargs.i
+    com.invoke $speak "Speak"
+    delay $fargs.delay
+  }
+}
+

@@ -1,0 +1,20 @@
+/*
+ Logical drives enumeration sample
+*/
+
+var $i
+var $s
+
+enumdrives $d
+
+echo "Drives\n"
+echo "------\n"
+
+for $i 1 to $d.count
+{
+  echo $d.$i "\n"
+}
+
+echo "All as string: " $d "\n"
+
+end

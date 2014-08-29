@@ -1,0 +1,15 @@
+# var declaration test
+var $cnt 0
+
+label $repeat
+  add $cnt 1
+  echo "cnt=" $cnt "\n"
+  if_lt $cnt 5 $repeat
+echo "after loop, cnt=" $cnt "\n"
+
+unvar $cnt
+var $cnt
+assign $cnt "elias"
+echo "cnt=" $cnt "\n"
+assign $obj1.name "undefined"
+echo "obj1.name=" $obj1.name "\n"

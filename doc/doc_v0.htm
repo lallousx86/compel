@@ -1,0 +1,1230 @@
+<html>
+<head>
+<title>:: COMPEL :: Documentation v1</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<style>
+.cppcode
+{
+background-color:yellow
+}
+</style>
+</head>
+<body bgcolor="#FFFFFF" text="#000000">
+<center>
+  <br>
+  <br>
+  <h2> COMPEL v0.1 - Interpreter Engine</h2>
+  <br>
+  <br>
+  <br>
+  By: Elias Bachaalany<br>
+  Instructor: Mr. Elie Nasr<br>
+  Course: Compiler Design 
+</center>
+<br>
+<br>
+<br>
+Table of contents:<br>
+<ol>
+  <li><a href="#introduction">Introduction </a>
+  <li><a href="#overview">Overview </a> 
+    <ul>
+      <li>Symbol and objects architecture 
+      <li>COMPEL's grammar 
+      <li>COMPEL's example syntax 
+    </ul>
+  <li><a href="#engine">Using COMPEL Engine </a> 
+    <ul>
+      <li><a href="#snips"> Code snips</a>
+      <li><a href="#driver"> The driver program</a>
+      <li><a href="#errors"> COMPEL Error codes</a><br>
+      
+    </ul>
+  <li><a href="#modules">Source code modules overview </a>
+  <li><a href="#conclusion">Conclusion </a>
+</ol>
+<br>
+<br>
+<u> 
+<h2><a name="introduction"></a>Introduction</h2>
+</u> <br>
+COMPEL is a verb based interpreter. The word compel means "give an order", and 
+since COMPEL's grammar dictates that everything starts with a command (or verb) 
+thus the name of the interpreter. <br>
+It happened also that when I chose the name COMPEL I realized that COMPEL sounds 
+like COMPILE, which is the topic of this document.<br>
+<br>
+<br>
+<u> 
+<h2><a name="overview"></a>Overview</h2>
+</u> <br>
+
+COMPEL is written in C++ and compiled successfully with Visual C++, however it 
+may compile with other compilers with little modifications.<br>
+COMPEL makes heavy use of the C++ standard template library.<br>
+<br>
+<u><h4>Symbol and objects architecture:</h4>
+</u>Internally, every entity is derived from the symbol class. Functions, 
+variables, values, objects, etc...are all symbols.<br>
+An STL std::map&lt;std::string, symbol_t *&gt; map is created to map a given symbol 
+name to its corresponding memory location.<br>
+<br>
+<img src="images/symbol_hierarchy_50.jpg"> <br>
+<br>
+<br>
+<u><h4>COMPEL's grammar:</h4></u>
+<pre class="cppcode">
+PROGRAM -> COMMANDS
+COMMANDS -> COMMAND COMMAND_SEPARATOR COMMANDS | epsilon
+COMMAND -> COMMENT1 | COMMENT2 | COMMAND
+COMMENT1 -> "#" ANYCHAR
+COMMENT2 -> "//" ANYCHAR
+COMMAND -> FUNCTION PARAMLIST
+PARAMLIST -> TOKEN_SEPARATOR ANYWORD PARAMLIST | espilon
+COMMAND_SEPARATOR -> "\n"
+TOKEN_SEPARATOR -> " "
+FUNCTION -> fopen | label | goto | if_lt | if_gt | ...
+</pre>
+<br>
+<u><h4>COMPEL's example syntax:</h4></u>
+<pre class="cppcode">
+#This is our hello world program
+echo "Hello world from COMPEL!\n"
+end
+</pre>
+
+Or a counting program:<br>
+<pre class="cppcode">
+#this is a counting program
+
+var $i 0
+label $repeat
+  add $i 1
+  echo "i=" $i "\n"
+  if_lt $i 10 $repeat
+
+echo "Finished!\n"
+end
+</pre>
+<br>
+<h2><u><a name="engine"></a>Using COMPEL Engine</u></h2>
+
+<u> 
+<h3><a name="snips"></a>Code snips:<br>
+</h3>
+</u> 
+<table width="681" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td bgcolor="#CCCCCC" height="44">This code tests the vale_t class by assign 
+      values to it and printing them back. </td>
+  </tr>
+  <tr> 
+    <td> 
+      <pre class="cppcode"><font color="#FF6633">int</font> value_test<b><font color="#663300">()
+{</font></b>
+  value_t t<b><font color="#663300">(</font></b><font color="#999900">123</font><b><font color="#663300">);</font></b>
+
+  t<b><font color="#663300"> =</font></b><font color="#999900"> 111</font><b><font color="#663300">;</font></b>
+
+  printf<b><font color="#663300">(</font></b><font color="#009900">"%s\n"</font><b><font color="#663300">,</font></b> t<b><font color="#663300">.</font></b>get_str_value<b><font color="#663300">(</font></b><font color="#999900">8</font><b><font color="#663300">));</font></b><font color="#FF0000">
+
+  return</font><font color="#999900"> 0</font><b><font color="#663300">;
+}</font></b><font color="#FF6633">
+</font></pre>
+      &nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC" height="33">This tests the object_t class, by creating 
+      an object and manipulating its attributes.</td>
+  </tr>
+  <tr> 
+    <td> 
+      <pre class="cppcode"><FONT COLOR="#FF6633">
+int</FONT> object_test<B><FONT COLOR="#663300">()
+{</FONT></B>
+  object_t obj<B><FONT COLOR="#663300">;</FONT></B>
+
+  value_t<B><FONT COLOR="#663300"> *</FONT></B>size<B><FONT COLOR="#663300"> =</FONT></B> obj<B><FONT COLOR="#663300">.</FONT></B>insert_attribute<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"size"</FONT><B><FONT COLOR="#663300">);</FONT></B>
+  size<B><FONT COLOR="#663300">-&gt;</FONT></B>set_int_value<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#999900">1234</FONT><B><FONT COLOR="#663300">);</FONT></B>
+
+  printf<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"size=%s\n"</FONT><B><FONT COLOR="#663300">,</FONT></B> obj<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#009900">"size"</FONT><B><FONT COLOR="#663300">].</FONT></B>get_str_value<B><FONT COLOR="#663300">());</FONT></B><FONT COLOR="#FF0000">
+
+  return</FONT><FONT COLOR="#999900"> 0</FONT><B><FONT COLOR="#663300">;
+}</FONT></B><FONT COLOR="#FF6633"></FONT></pre>
+      &nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC" height="50">This snip tests the lines_t class. It inserts 
+      lines to the buffer, then retrieve a given line number.</td>
+  </tr>
+  <tr> 
+    <td> 
+      <pre class="cppcode"><FONT COLOR="#FF6633">
+void</FONT> test_lines<B><FONT COLOR="#663300">()
+{</FONT></B>
+  lines_t line<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#FF0000">
+
+  for</FONT><B><FONT COLOR="#663300"> (</FONT></B><FONT COLOR="#FF6633">int</FONT> i<B><FONT COLOR="#663300">=</FONT></B><FONT COLOR="#999900">0</FONT><B><FONT COLOR="#663300">;</FONT></B>i<B><FONT COLOR="#663300">&lt;</FONT></B><FONT COLOR="#999900">10</FONT><B><FONT COLOR="#663300">;</FONT></B>i<B><FONT COLOR="#663300">++)
+  {</FONT></B><FONT COLOR="#FF6633">
+
+    char</FONT> str<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#999900">100</FONT><B><FONT COLOR="#663300">];</FONT></B>
+    sprintf<B><FONT COLOR="#663300">(</FONT></B>str<B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#009900"> "line #%d"</FONT><B><FONT COLOR="#663300">,</FONT></B> i<B><FONT COLOR="#663300">+</FONT></B><FONT COLOR="#999900">1</FONT><B><FONT COLOR="#663300">);</FONT></B>
+
+    line<B><FONT COLOR="#663300">.</FONT></B>add<B><FONT COLOR="#663300">(</FONT></B>str<B><FONT COLOR="#663300">);
+  }</FONT></B>
+
+  printf<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"%s\n"</FONT><B><FONT COLOR="#663300">,</FONT></B> line<B><FONT COLOR="#663300">.</FONT></B>getline<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#999900">10</FONT><B><FONT COLOR="#663300">));
+}</FONT></B><FONT COLOR="#990000">
+</FONT></pre>
+      &nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC" height="58">This snip illustrates how to create a user 
+      function. How it should be created and what methods it should extended. 
+      Notice how it inherits from function_t class.</td>
+  </tr>
+  <tr> 
+    <td> 
+      <pre class="cppcode"><FONT COLOR="#990000">class</FONT> fnc_about<B><FONT COLOR="#663300"> :</FONT></B><FONT COLOR="#990000"> public</FONT> function_t<B><FONT COLOR="#663300">
+{</FONT></B><FONT COLOR="#990000">
+private</FONT><B><FONT COLOR="#663300">:</FONT></B><FONT COLOR="#FF6633">
+
+  void</FONT> basic_init<B><FONT COLOR="#663300">()
+  {</FONT></B>
+    set_namedesc<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"about"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#009900"> "Prints about text!"</FONT><B><FONT COLOR="#663300">);</FONT></B>
+    set_minmaxargs<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#999900">0</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#999900"> 0</FONT><B><FONT COLOR="#663300">);
+  }</FONT></B><FONT COLOR="#990000">
+
+public</FONT><B><FONT COLOR="#663300">:</FONT></B>
+  fnc_about<B><FONT COLOR="#663300">(</FONT></B>interpreter_t<B><FONT COLOR="#663300"> *</FONT></B>interpreter<B><FONT COLOR="#663300">)
+  {</FONT></B>
+    basic_init<B><FONT COLOR="#663300">();</FONT></B>
+
+    set_interpreter<B><FONT COLOR="#663300">(</FONT></B>interpreter<B><FONT COLOR="#663300">);
+  }</FONT></B>
+
+  fnc_about<B><FONT COLOR="#663300">()
+  {</FONT></B>
+    basic_init<B><FONT COLOR="#663300">();
+  }</FONT></B>
+
+  parse_errors_e execute<B><FONT COLOR="#663300">()
+  {</FONT></B>
+
+    variable_t<B><FONT COLOR="#663300"> *</FONT></B>temp<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#999900"> 0</FONT><B><FONT COLOR="#663300">;</FONT></B>
+    printf<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"This is about text!\n"</FONT><B><FONT COLOR="#663300">);</FONT></B><FONT COLOR="#FF0000">
+
+    return</FONT> parse_error_none<B><FONT COLOR="#663300">;
+  }
+};</FONT></B><FONT COLOR="#FF6633"></FONT></pre>
+      &nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC" height="55">This snip tests the symbol table, by inserting 
+      into it various types of symbols (objects, values, functions) then retrieving 
+      the symbols from the table.</td>
+  </tr>
+  <tr> 
+    <td> 
+      <pre class="cppcode"><FONT COLOR="#FF6633">void</FONT> test_symtbl<B><FONT COLOR="#663300">()
+{</FONT></B>
+  symbol_table_t st<B><FONT COLOR="#663300">;</FONT></B>
+
+  value_t<B><FONT COLOR="#663300"> *</FONT></B>pval<B><FONT COLOR="#663300">;</FONT></B>
+  variable_t<B><FONT COLOR="#663300"> *</FONT></B>pvar<B><FONT COLOR="#663300">;</FONT></B>
+  object_t<B><FONT COLOR="#663300"> *</FONT></B>pobj<B><FONT COLOR="#663300">;</FONT></B>
+
+  function_t<B><FONT COLOR="#663300"> *</FONT></B>pfnc<B><FONT COLOR="#663300">;</FONT></B>
+
+  object_t<B><FONT COLOR="#663300"> *</FONT></B>obj1<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> new</FONT> object_t<B><FONT COLOR="#663300">();</FONT></B><I><FONT COLOR="#999999">
+
+  // add an attribute to this object
+</FONT></I>  obj1<B><FONT COLOR="#663300">-&gt;</FONT></B>insert_attribute<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"val1000"</FONT><B><FONT COLOR="#663300">)-&gt;</FONT></B>set_int_value<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#999900">1000</FONT><B><FONT COLOR="#663300">);</FONT></B>
+  obj1<B><FONT COLOR="#663300">-&gt;</FONT></B>insert_attribute<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"hello"</FONT><B><FONT COLOR="#663300">)-&gt;</FONT></B>set_str_value<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"hello"</FONT><B><FONT COLOR="#663300">);</FONT></B><I><FONT COLOR="#999999">
+
+  // add a normal variable
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"v1"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> value_t<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#999900">1234</FONT><B><FONT COLOR="#663300">));</FONT></B><I><FONT COLOR="#999999">
+
+  // add an object variable
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"obj1"</FONT><B><FONT COLOR="#663300">,</FONT></B> obj1<B><FONT COLOR="#663300">);</FONT></B><I><FONT COLOR="#999999">
+
+  // add a function symbol
+
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"about"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_about<B><FONT COLOR="#663300">());</FONT></B><I><FONT COLOR="#999999">
+
+  // retrieve the variable from the symbol table
+</FONT></I>  pvar<B><FONT COLOR="#663300"> =</FONT></B> st<B><FONT COLOR="#663300">.</FONT></B>get_variable<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"v1"</FONT><B><FONT COLOR="#663300">);</FONT></B>
+
+  pval<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> static_cast</FONT><B><FONT COLOR="#663300">&lt;</FONT></B>value_t<B><FONT COLOR="#663300"> *&gt;(</FONT></B>pvar<B><FONT COLOR="#663300">);</FONT></B>
+  printf<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"value of v1=%d\n"</FONT><B><FONT COLOR="#663300">,</FONT></B> pval<B><FONT COLOR="#663300">-&gt;</FONT></B>get_int_value<B><FONT COLOR="#663300">());</FONT></B><I><FONT COLOR="#999999">
+
+  // retrieve the object from the symbol table
+</FONT></I>  pvar<B><FONT COLOR="#663300"> =</FONT></B> st<B><FONT COLOR="#663300">.</FONT></B>get_variable<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"obj1"</FONT><B><FONT COLOR="#663300">);</FONT></B>
+  pobj<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> static_cast</FONT><B><FONT COLOR="#663300">&lt;</FONT></B>object_t<B><FONT COLOR="#663300"> *&gt;(</FONT></B>pvar<B><FONT COLOR="#663300">);</FONT></B>
+
+  printf<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"obj.hello=%s obj.val1000=%d\n"</FONT><B><FONT COLOR="#663300">,</FONT></B> pobj<B><FONT COLOR="#663300">-&gt;</FONT></B>value<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"hello"</FONT><B><FONT COLOR="#663300">)-&gt;</FONT></B>get_str_value<B><FONT COLOR="#663300">(),</FONT></B> 
+    pobj<B><FONT COLOR="#663300">-&gt;</FONT></B>value<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"val1000"</FONT><B><FONT COLOR="#663300">)-&gt;</FONT></B>get_int_value<B><FONT COLOR="#663300">());</FONT></B>
+
+  pfnc<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> static_cast</FONT><B><FONT COLOR="#663300">&lt;</FONT></B>function_t<B><FONT COLOR="#663300"> *&gt;(</FONT></B>st<B><FONT COLOR="#663300">.</FONT></B>get_function<B><FONT COLOR="#663300"> (</FONT></B><FONT COLOR="#009900">"about"</FONT><B><FONT COLOR="#663300">));</FONT></B>
+
+  pfnc<B><FONT COLOR="#663300">-&gt;</FONT></B>execute<B><FONT COLOR="#663300">();
+}</FONT></B><FONT COLOR="#FF6633">
+</FONT></pre>
+      &nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC">This snip illustrates how to use the interpreter_t with 
+      the symbol table class. Thus we now execute lines using the code!</td>
+  </tr>
+  <tr> 
+    <td> 
+      <pre class="cppcode"><FONT COLOR="#FF6633">
+void</FONT> test_parser1<B><FONT COLOR="#663300">(</FONT></B>interpreter_t<B><FONT COLOR="#663300"> *</FONT></B>parser<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#999900"> 0</FONT><B><FONT COLOR="#663300">)
+{</FONT></B><FONT COLOR="#FF0000">
+
+  if</FONT><B><FONT COLOR="#663300"> (</FONT></B>parser<B><FONT COLOR="#663300"> ==</FONT></B><FONT COLOR="#999900"> 0</FONT><B><FONT COLOR="#663300">)</FONT></B>
+    parser<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> new</FONT> interpreter_t<B><FONT COLOR="#663300">();</FONT></B>
+
+  symbol_table_t st<B><FONT COLOR="#663300">;</FONT></B>
+
+  function_t<B><FONT COLOR="#663300"> *</FONT></B>cmd_about<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_about<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">);</FONT></B>
+
+  function_t<B><FONT COLOR="#663300"> *</FONT></B>cmd_echo<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_echo<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">);</FONT></B>
+  object_t<B><FONT COLOR="#663300"> *</FONT></B>obj1<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> new</FONT> object_t<B><FONT COLOR="#663300">();</FONT></B>
+
+  object_t<B><FONT COLOR="#663300"> *</FONT></B>obj2<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> new</FONT> object_t<B><FONT COLOR="#663300">();</FONT></B><I><FONT COLOR="#999999">
+
+  // setup - obj1
+</FONT></I>  obj1<B><FONT COLOR="#663300">-&gt;</FONT></B>insert_attribute<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"val1000"</FONT><B><FONT COLOR="#663300">)-&gt;</FONT></B>set_int_value<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#999900">1000</FONT><B><FONT COLOR="#663300">);</FONT></B>
+
+  obj1<B><FONT COLOR="#663300">-&gt;</FONT></B>insert_attribute<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"hello"</FONT><B><FONT COLOR="#663300">)-&gt;</FONT></B>set_str_value<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"hello"</FONT><B><FONT COLOR="#663300">);</FONT></B>
+  obj1<B><FONT COLOR="#663300">-&gt;</FONT></B>insert_attribute<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"name"</FONT><B><FONT COLOR="#663300">)-&gt;</FONT></B>set_str_value<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"$obj1"</FONT><B><FONT COLOR="#663300">);</FONT></B><I><FONT COLOR="#999999">
+
+  // setup - obj2
+</FONT></I>  obj2<B><FONT COLOR="#663300">-&gt;</FONT></B>insert_attribute<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"age"</FONT><B><FONT COLOR="#663300">)-&gt;</FONT></B>set_str_value<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"a hundred"</FONT><B><FONT COLOR="#663300">);</FONT></B><I><FONT COLOR="#999999">
+
+  // add variables
+
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"$v1"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> value_t<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#999900">1234</FONT><B><FONT COLOR="#663300">));</FONT></B><I><FONT COLOR="#999999">
+
+  // add an objects variables
+
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"$obj1"</FONT><B><FONT COLOR="#663300">,</FONT></B> obj1<B><FONT COLOR="#663300">);</FONT></B>
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"$obj2"</FONT><B><FONT COLOR="#663300">,</FONT></B> obj2<B><FONT COLOR="#663300">);</FONT></B><I><FONT COLOR="#999999">
+
+  // add a function symbol
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"about"</FONT><B><FONT COLOR="#663300">,</FONT></B> cmd_about<B><FONT COLOR="#663300">);</FONT></B>
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"echo"</FONT><B><FONT COLOR="#663300">,</FONT></B> cmd_echo<B><FONT COLOR="#663300">);</FONT></B>
+
+  std<B><FONT COLOR="#663300">::</FONT></B>string line<B><FONT COLOR="#663300">;</FONT></B>
+
+  parser<B><FONT COLOR="#663300">-&gt;</FONT></B>set_symbol_table<B><FONT COLOR="#663300">(&amp;</FONT></B>st<B><FONT COLOR="#663300">);</FONT></B>
+
+  line<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#009900"> "echo elias says: $obj1.hello $obj2.age $obj1.val1000 $v1"</FONT><B><FONT COLOR="#663300">;</FONT></B>
+
+  parser<B><FONT COLOR="#663300">-&gt;</FONT></B>interpret_new_line<B><FONT COLOR="#663300">(</FONT></B>line<B><FONT COLOR="#663300">.</FONT></B>c_str<B><FONT COLOR="#663300">());</FONT></B><FONT COLOR="#990000">
+
+  delete</FONT> parser<B><FONT COLOR="#663300">;
+}</FONT></B><FONT COLOR="#FF6633">
+</FONT></pre>
+      &nbsp;</td>
+  </tr>
+  <tr> 
+    <td bgcolor="#CCCCCC" height="44">This snip illustrates the usage of file 
+      and memory objects.</td>
+  </tr>
+  <tr> 
+    <td> 
+      <pre class="cppcode">
+<PRE><FONT COLOR="#FF6633">
+</FONT><FONT COLOR="#FF6633">
+void</FONT> test_file_object1<B><FONT COLOR="#663300">()
+{</FONT></B><FONT COLOR="#FF6633">
+  char</FONT> buf<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#999900">1024</FONT><B><FONT COLOR="#663300">] = {</FONT></B><FONT COLOR="#999900">0</FONT><B><FONT COLOR="#663300">};</FONT></B>
+
+  file_object_t fo<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"_trash.txt"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#009900"> "r"</FONT><B><FONT COLOR="#663300">);</FONT></B><FONT COLOR="#FF0000">
+
+  if</FONT><B><FONT COLOR="#663300"> (!</FONT></B>fo<B><FONT COLOR="#663300">.</FONT></B>open<B><FONT COLOR="#663300">())</FONT></B><FONT COLOR="#FF0000">
+
+    return</FONT><B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#FF0000">
+
+  while</FONT><B><FONT COLOR="#663300"> (</FONT></B>fo<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#009900">"eof"</FONT><B><FONT COLOR="#663300">].</FONT></B>get_int_value<B><FONT COLOR="#663300">() ==</FONT></B><FONT COLOR="#999900"> 0</FONT><B><FONT COLOR="#663300">)
+  {</FONT></B>
+
+    fo<B><FONT COLOR="#663300">.</FONT></B>read<B><FONT COLOR="#663300">(</FONT></B>buf<B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#999900"> 100</FONT><B><FONT COLOR="#663300">);</FONT></B>
+    printf<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"name: %s;pos:%d;read:%d\nbuf:%s&lt;\n"</FONT><B><FONT COLOR="#663300">,</FONT></B> 
+      fo<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#009900">"filename"</FONT><B><FONT COLOR="#663300">].</FONT></B>get_str_value<B><FONT COLOR="#663300">(),</FONT></B>
+
+      fo<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#009900">"pos"</FONT><B><FONT COLOR="#663300">].</FONT></B>get_int_value<B><FONT COLOR="#663300">(),</FONT></B>
+      fo<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#009900">"read"</FONT><B><FONT COLOR="#663300">].</FONT></B>get_int_value<B><FONT COLOR="#663300">(),</FONT></B>
+      buf<B><FONT COLOR="#663300">);
+  }</FONT></B>
+
+  fo<B><FONT COLOR="#663300">.</FONT></B>close<B><FONT COLOR="#663300">();
+}</FONT></B><FONT COLOR="#FF6633">
+
+void</FONT> test_memory_object<B><FONT COLOR="#663300">()
+{</FONT></B>
+  memory_object_t mo<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#999900">1024</FONT><B><FONT COLOR="#663300">);</FONT></B>
+
+  mo<B><FONT COLOR="#663300">.</FONT></B>alloc<B><FONT COLOR="#663300">();</FONT></B>
+
+  strcpy<B><FONT COLOR="#663300">(</FONT></B>mo<B><FONT COLOR="#663300">.</FONT></B>get_ptr<B><FONT COLOR="#663300">(),</FONT></B><FONT COLOR="#009900"> "Hello world!"</FONT><B><FONT COLOR="#663300">);</FONT></B>
+
+  printf<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"mo; size=%d ptr=%p; -&gt; %s\n"</FONT><B><FONT COLOR="#663300">,</FONT></B> 
+    mo<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#009900">"size"</FONT><B><FONT COLOR="#663300">].</FONT></B>get_int_value<B><FONT COLOR="#663300">(),</FONT></B> 
+    mo<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#009900">"ptr"</FONT><B><FONT COLOR="#663300">].</FONT></B>get_int_value<B><FONT COLOR="#663300">(),</FONT></B>
+
+    mo<B><FONT COLOR="#663300">.</FONT></B>get_ptr<B><FONT COLOR="#663300">());</FONT></B><I><FONT COLOR="#999999">
+
+  //mo.free(); // automatically freed
+</FONT></I><B><FONT COLOR="#663300">}</FONT></B>
+</PRE>
+</pre>
+    </td>
+  </tr>
+  <tr> 
+    <td bgcolor="#999999" height="77"> 
+      <h3><a name="driver"></a>Putting it all together: The driver program</h3>
+    </td>
+  </tr>
+  <tr> 
+    <td> 
+      <pre class="cppcode">
+<PRE><FONT COLOR="#000099">#pragma warning (disable: 4996)
+#define WIN32_LEAN_AND_MEAN
+#include &lt;windows.h&gt;
+#include &lt;stdarg.h&gt;
+#include &lt;stdio.h&gt;
+
+#include &lt;string.h&gt;
+#include &lt;map&gt;
+#include &lt;string&gt;
+#include &lt;algorithm&gt;
+#include &lt;list&gt;
+#include &lt;iterator&gt;
+
+#include &lt;fstream&gt;
+#include &lt;crtdbg.h&gt;
+#include "StringListParser.h"
+</FONT><I><FONT COLOR="#999999">
+</FONT></I><FONT COLOR="#000099">#include "fwd.h"
+
+#include "symbol.h"
+#include "variable.h"
+#include "interpreter.h"
+#include "lines.h"
+#include "value.h"
+#include "object.h"
+#include "function.h"
+#include "symbol_table.h"
+</FONT><I><FONT COLOR="#999999">
+// Objects
+</FONT></I><FONT COLOR="#000099">#include "memory_object.h"
+#include "file_object.h"
+</FONT><I><FONT COLOR="#999999">
+// Functions
+
+</FONT></I><FONT COLOR="#000099">#include "fnc_echo.h"
+#include "fnc_branching.h"
+#include "fnc_arith.h"
+#include "fnc_fileio.h"
+#include "fnc_memory.h"
+#include "fnc_vars.h"
+</FONT><FONT COLOR="#FF6633">
+</FONT><FONT COLOR="#FF6633">void</FONT> test_interpreter<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#FF6633">char</FONT><B><FONT COLOR="#663300"> *</FONT></B>progfn<B><FONT COLOR="#663300">)
+{</FONT></B>
+  symbol_table_t st<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#FF0000">
+  interpreter_t<b><font color="#663300"> *</font></b>parser<b><font color="#663300">;<br></font></b>
+  if</FONT><B><FONT COLOR="#663300"> (</FONT></B>parser<B><FONT COLOR="#663300"> ==</FONT></B><FONT COLOR="#999900"> 0</FONT><B><FONT COLOR="#663300">)</FONT></B>
+    parser<B><FONT COLOR="#663300"> =</FONT></B><FONT COLOR="#990000"> new</FONT> interpreter_t<B><FONT COLOR="#663300">();</FONT></B>
+
+<I><FONT COLOR="#999999">  // add a function symbol
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"about"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_about<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"echo"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_echo<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">));</FONT></B>
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"end"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_end<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">));</FONT></B><I><FONT COLOR="#999999">
+
+  // arithmetics
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"add"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_binary_arith<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_binary_arith<B><FONT COLOR="#663300">::</FONT></B>ba_add<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"sub"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_binary_arith<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_binary_arith<B><FONT COLOR="#663300">::</FONT></B>ba_sub<B><FONT COLOR="#663300">));</FONT></B><I><FONT COLOR="#999999">
+
+  // comparison / branching
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"label"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_label<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">));</FONT></B>
+
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"goto"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_goto<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">));</FONT></B>
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"if_eq"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_binary_comparison<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_binary_comparison<B><FONT COLOR="#663300">::</FONT></B>bc_eq<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"if_neq"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_binary_comparison<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_binary_comparison<B><FONT COLOR="#663300">::</FONT></B>bc_neq<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"if_gt"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_binary_comparison<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_binary_comparison<B><FONT COLOR="#663300">::</FONT></B>bc_gt<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"if_lt"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_binary_comparison<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_binary_comparison<B><FONT COLOR="#663300">::</FONT></B>bc_lt<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"if_gte"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_binary_comparison<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_binary_comparison<B><FONT COLOR="#663300">::</FONT></B>bc_gte<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"if_lte"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_binary_comparison<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_binary_comparison<B><FONT COLOR="#663300">::</FONT></B>bc_lte<B><FONT COLOR="#663300">));</FONT></B><I><FONT COLOR="#999999">
+
+  // file i/o
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"fopen"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_fileio<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_fileio<B><FONT COLOR="#663300">::</FONT></B>fio_fopen<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"fclose"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_fileio<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_fileio<B><FONT COLOR="#663300">::</FONT></B>fio_fclose<B><FONT COLOR="#663300">));</FONT></B><I><FONT COLOR="#999999">
+
+  // mem i/o
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"malloc"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_memory<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_memory<B><FONT COLOR="#663300">::</FONT></B>mo_malloc<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"mfree"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_memory<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_memory<B><FONT COLOR="#663300">::</FONT></B>mo_mfree<B><FONT COLOR="#663300">));</FONT></B><I><FONT COLOR="#999999">
+
+  // vars
+</FONT></I>  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"var"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_vars<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_vars<B><FONT COLOR="#663300">::</FONT></B>vo_var<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"unvar"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_vars<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_vars<B><FONT COLOR="#663300">::</FONT></B>vo_unvar<B><FONT COLOR="#663300">));</FONT></B>
+
+  st<B><FONT COLOR="#663300">.</FONT></B>add_symbol<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"assign"</FONT><B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#990000"> new</FONT> fnc_vars<B><FONT COLOR="#663300">(</FONT></B>parser<B><FONT COLOR="#663300">,</FONT></B> fnc_vars<B><FONT COLOR="#663300">::</FONT></B>vo_assign<B><FONT COLOR="#663300">));</FONT></B>
+
+  parser<B><FONT COLOR="#663300">-&gt;</FONT></B>set_symbol_table<B><FONT COLOR="#663300">(&amp;</FONT></B>st<B><FONT COLOR="#663300">);</FONT></B>
+
+  parse_errors_e err<B><FONT COLOR="#663300"> =</FONT></B> parse_error_none<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#FF6633">
+
+  bool</FONT> bLoadOk<B><FONT COLOR="#663300"> =</FONT></B> parser<B><FONT COLOR="#663300">-&gt;</FONT></B>load_lines_from_file<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#999900">0</FONT><B><FONT COLOR="#663300">,</FONT></B> progfn<B><FONT COLOR="#663300">);</FONT></B><FONT COLOR="#FF0000">
+
+  while</FONT><B><FONT COLOR="#663300"> (</FONT></B>bLoadOk<B><FONT COLOR="#663300"> &amp;&amp;</FONT></B> err<B><FONT COLOR="#663300"> !=</FONT></B> parse_stop_parsing<B><FONT COLOR="#663300">)
+  {</FONT></B>
+    size_t curline<B><FONT COLOR="#663300"> =</FONT></B> parser<B><FONT COLOR="#663300">-&gt;</FONT></B>get_cur_source_lineno<B><FONT COLOR="#663300">();</FONT></B>
+
+    err<B><FONT COLOR="#663300"> =</FONT></B> parser<B><FONT COLOR="#663300">-&gt;</FONT></B>interpret_line<B><FONT COLOR="#663300">();</FONT></B><FONT COLOR="#FF0000">
+    switch</FONT><B><FONT COLOR="#663300"> (</FONT></B>err<B><FONT COLOR="#663300">)
+    {</FONT></B><FONT COLOR="#FF0000">
+
+    case</FONT> parse_error_line_is_void<B><FONT COLOR="#663300">:</FONT></B><FONT COLOR="#FF0000">
+    case</FONT> parse_error_none<B><FONT COLOR="#663300">:</FONT></B><FONT COLOR="#FF0000">
+    case</FONT> parse_stop_parsing<B><FONT COLOR="#663300">:</FONT></B><FONT COLOR="#FF0000">
+
+    case</FONT> parse_line_is_empty<B><FONT COLOR="#663300">:</FONT></B><FONT COLOR="#FF0000">
+    case</FONT> parse_error_line_is_comment<B><FONT COLOR="#663300">:</FONT></B><FONT COLOR="#FF0000">
+      continue</FONT><B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#FF0000">
+    default</FONT><B><FONT COLOR="#663300">:</FONT></B>
+
+      printf<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"&gt;warning: %d @ line %d\n"</FONT><B><FONT COLOR="#663300">,</FONT></B> err<B><FONT COLOR="#663300">,</FONT></B> curline<B><FONT COLOR="#663300">+</FONT></B><FONT COLOR="#999900">1</FONT><B><FONT COLOR="#663300">);
+    }
+  }</FONT></B><I><FONT COLOR="#999999">
+
+</FONT></I><FONT COLOR="#990000">
+  delete</FONT> parser<B><FONT COLOR="#663300">;
+}</FONT></B><FONT COLOR="#FF6633">
+
+int</FONT><FONT COLOR="#990000"> main</FONT><B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#FF6633">int</FONT> argc<B><FONT COLOR="#663300">,</FONT></B><FONT COLOR="#FF6633"> char</FONT><B><FONT COLOR="#663300"> *</FONT></B>argv<B><FONT COLOR="#663300">[])
+{</FONT></B><FONT COLOR="#FF0000">
+
+  if</FONT><B><FONT COLOR="#663300"> (</FONT></B>argc<B><FONT COLOR="#663300"> &lt;</FONT></B><FONT COLOR="#999900"> 2</FONT><B><FONT COLOR="#663300">)
+  {</FONT></B>
+    printf<B><FONT COLOR="#663300">(</FONT></B><FONT COLOR="#009900">"usage: %s script.txt\n"</FONT><B><FONT COLOR="#663300">,</FONT></B> argv<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#999900">0</FONT><B><FONT COLOR="#663300">]);</FONT></B><FONT COLOR="#FF0000">
+
+    return</FONT><B><FONT COLOR="#663300"> -</FONT></B><FONT COLOR="#999900">1</FONT><B><FONT COLOR="#663300">;
+  }</FONT></B>
+
+  test_interpreter<B><FONT COLOR="#663300">(</FONT></B>argv<B><FONT COLOR="#663300">[</FONT></B><FONT COLOR="#999900">1</FONT><B><FONT COLOR="#663300">]);</FONT></B><I><FONT COLOR="#999999">
+
+</FONT></I><FONT COLOR="#FF0000">  return</FONT><FONT COLOR="#999900"> 0</FONT><B><FONT COLOR="#663300">;
+}</FONT></B></PRE>
+</pre>
+      &nbsp;</td>
+  </tr>
+</table>
+<p>
+<u>
+<h4><a name="errors"></a>COMPEL Error codes:</h4>
+</u> 
+<table width="797" border="1">
+  <tr bgcolor="#CCCCCC"> 
+    <td width="236">Error Number</td>
+    <td width="545">Meaning</td>
+  </tr>
+  <tr> 
+    <td width="236"> 0<br>
+      parse_error_none<br>
+    </td>
+    <td width="545">no errors detected</td>
+  </tr>
+  <tr> 
+    <td width="236">1<br>
+      parse_error_more_param </td>
+    <td width="545">too many parameters passed</td>
+  </tr>
+  <tr> 
+    <td width="236">2<br>
+      parse_error_less_param</td>
+    <td width="545">few parameters</td>
+  </tr>
+  <tr> 
+    <td width="236">3<br>
+      parse_error_symbol_not_in_table</td>
+    <td width="545">attempted to access an invalid symbol</td>
+  </tr>
+  <tr> 
+    <td width="236">4<br>
+      parse_error_symbol_type_mismatch </td>
+    <td width="545">we expect a variable of a given type but found another type 
+      <br>
+      can happen when passing a value_t variable instead of an object_t<br>
+      or we passing a process_object to a file_object function</td>
+  </tr>
+  <tr> 
+    <td width="236">5<br>
+      parse_error_symbol_redefinition </td>
+    <td width="545">You attempted to redefine an existing symbol in the symtbl.<br>
+      That symbol might be a label, function or any other variable<br>
+    </td>
+  </tr>
+  <tr> 
+    <td width="236">6<br>
+      parse_error_line_is_comment </td>
+    <td width="545">this line is a comment and not processed</td>
+  </tr>
+  <tr> 
+    <td width="236">7<br>
+      parse_error_function_expected </td>
+    <td width="545">a function is expected</td>
+  </tr>
+  <tr> 
+    <td width="236">8<br>
+      parse_continue_parsing</td>
+    <td width="545">on_parse_error() requested to live with the error and continue 
+      parsing</td>
+  </tr>
+  <tr> 
+    <td width="236">9<br>
+      parse_stop_parsing</td>
+    <td width="545">on_parse_error() requested to stop or a method requested to 
+      stop (such as END) or just tell interpreter to stop parsing</td>
+  </tr>
+  <tr> 
+    <td width="236">10<br>
+      parse_error_wrong_syntax </td>
+    <td width="545">returned when a function was expected but on_error handler 
+      decided to live with the error</td>
+  </tr>
+  <tr> 
+    <td width="236">11<br>
+      parse_line_is_empty</td>
+    <td width="545">we parsed an empty line</td>
+  </tr>
+  <tr> 
+    <td width="236">12<br>
+      parse_error_variable_expected</td>
+    <td width="545">we expected a variable at the given argument</td>
+  </tr>
+  <tr> 
+    <td width="236">13<br>
+      parse_branch_to</td>
+    <td width="545">special code to instruct interpreter not to advance the source 
+      line number which means another mechanism must have adjusted the pointer</td>
+  </tr>
+  <tr> 
+    <td width="236">14<br>
+      parse_ignore_error <br>
+    </td>
+    <td width="545"> ignore this error and parse next line</td>
+  </tr>
+  <tr> 
+    <td width="236">15<br>
+      parse_error_label_expected</td>
+    <td width="545">a label was expected!</td>
+  </tr>
+  <tr> 
+    <td width="236">16<br>
+      parse_error_divide_by_zero_detected</td>
+    <td width="545">detected a divide by zero, operation skipped</td>
+  </tr>
+  <tr> 
+    <td width="236">17<br>
+      parse_error_object_expected</td>
+    <td width="545">we expected an appropriate object of a special type</td>
+  </tr>
+  <tr> 
+    <td width="236">18<br>
+      parse_error_line_is_void</td>
+    <td width="545">line is void</td>
+  </tr>
+</table>
+<br>
+  <br>
+<u> </u><u> 
+<h2><a name="modules"></a>Source code modules overview:</h2>
+</u> <br>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">file_object</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">File object variable representation. This module exposes all 
+      the supported File I/O methods.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="157">Interface</td>
+    <td width="616" align="left" valign="top" height="157"> 
+      <pre>explicit file_object_t(const char *fn, const char *openflags);<br>file_object_t(const file_object_t &amp;rhs);<br>bool open();<br>void close();<br>bool write(void *buffer, size_t size);<br>bool seek(long offset, int origin);<br>bool read(void *buffer, size_t size);<br>bool reada(void *buffer, long position, size_t size);<br></pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">memory_object</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">Memory object variable representation. This module exposes 
+      all the supported Memory operations</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="108">Interface</td>
+    <td width="616" align="left" valign="top" height="108"> 
+      <pre>explicit memory_object_t(size_t size);<br>bool alloc();<br>char *get_ptr() const;<br>memory_object_t(const memory_object_t &amp;rhs);<br>void free();<br>
+      </pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">symbol</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">Base symbol. This is the main class. Both variables and functions 
+      inherit from this class.<br>
+      It is basically an empty class that exposes basically methods to get/set 
+      its symbol kind.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="79">Interface</td>
+    <td width="616" align="left" valign="top" height="79"> 
+      <pre>void set_sym_kind(symbol_kind_e k);<br>symbol_kind_e get_sym_kind();</pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">parse_util</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">A library responsible for providing some parsing helping routines, 
+      such as parsing a number from a string or escaping special characters from 
+      inside a string.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="79">Interface</td>
+    <td width="616" align="left" valign="top" height="79"> 
+      <pre>parse_number(const char *p);<br>unescape_c_string(const char *src, char *dst);<br>hexchartoint(char x);</pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">RuntimeStdStringCmp.hpp</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">A helper class for comparing std::string with case or no case 
+      sensitivity. This class is used by the std::map class when it needs to sort 
+      its std::string keys. The class' methods should obey a given structure.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="79">Interface</td>
+    <td width="616" align="left" valign="top" height="79"> 
+      <pre>bool operator()(const std::string &amp;s1, const std::string &amp;s2) const<br></pre>
+    </td>
+  </tr>
+</table>
+<p><br>
+</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">lines</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">Responsible for reading lines from a file and storing them 
+      in a list of std::string.<br>
+      This class alows one to get a specific line by line number, edit a given 
+      line's data and clear lines.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="79">Interface</td>
+    <td width="616" align="left" valign="top" height="79"> 
+      <pre>void clear();<br>void add(const char *line);<br>void add(const std::string &amp;line);<br>const char *getline(int lineno);<br>size_t count() const;<br>std::string &amp;line(int lineno);<br>bool read_from_file(const char *fn, bool bClearLines = false);<br>size_t get_cur_line() const;<br>string_list_t &amp;get_string_list();<br></pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">symbol_table</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">This module is responsible for symbol table management routines. 
+      The class implements a hash map of symbol names vs. symbol_t types.<br>
+      Each entry in that table has a name and is of type symbol_t.<br>
+      Since all symbols in the language are inheried from symbol_t (module), then 
+      this symbol table module is enough to represent all symbols.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="79">Interface</td>
+    <td width="616" align="left" valign="top" height="79"> 
+      <pre>symbol_t *find_symbol(const char *symname);<br>symbol_t *add_symbol(const char *symname, symbol_t *sym);<br>function_t *add_function(const char *fncname, function_t *fnc);<br>variable_t *add_variable(const char *varname, variable_t *var);<br>bool remove_symbol(const char *symname);<br>void clear_table();<br>variable_t *get_variable(const char *varname);<br>function_t *get_function(const char *fncname);<br>strsymbol_map_t &amp;get_symtbl_raw();<br></pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">stringlistparser</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">This module tokenizes a given string. When provided by a string 
+      separator, input string, quote character, this module will split all the 
+      string's contents that are separated by &quot;separator&quot;. Later one 
+      can easily access each part of the string via an index.<br>
+      This class is one of the key parsing utils for COMPEL.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="79">Interface</td>
+    <td width="616" align="left" valign="top" height="79"> 
+      <pre>CStringListParser(TCHAR *Str = NULL, TCHAR sep = ' ', TCHAR quote = '&quot;');<br>int Parse(TCHAR *newStr = NULL, TCHAR sep = 0, TCHAR quote = 0);<br>const TCHAR *operator[](const int at) { return GetString(at); }<br>const TCHAR *       GetString(size_t at) const;<br>const unsigned long GetNumber(size_t at) const;<br>const size_t ParsedCount() const { return m_parsedcount;} <br>const bool GetBool(int at, const char boolTrueChar = '1') const;<br>const TCHAR GetChar(int at) const;<br>const size_t StringLength() const;<br>const TCHAR *Join(TCHAR sep=0);<br>bool  SetString(const int at, TCHAR *NewString);<br><br></pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">object</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">This class is derived from variable_t which is, in turn, derived 
+      from symbol.<br>
+      This class is the base object type. From it all other specialized objects 
+      inherit.<br>
+      For example, file objects and memory objects.<br>
+      <br>
+      In short, an object is a collection of variables, each with a name (attributes), 
+      that are bound together within the same object space.<br>
+    </td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="187">Interface</td>
+    <td width="616" align="left" valign="top" height="187"> 
+      <pre>void set_obj_kind(object_kind_e obj_kind);
+object_kind_e get_obj_kind();
+value_t *insert_attribute(const char *attribute);
+value_t *insert_attribute(const char *attribute, value_t &val);
+bool remove_attribute(const char *attribute);
+value_t *find_attribute(const char *attribute);
+value_t *value(const char *attribute);
+object_t();
+object_t(const object_t &rhs);
+virtual value_t &operator[](const char *attribute);
+</pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">variable</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">Inherits from symbol. Its objective is to provide a based 
+      for other variables to be defined on top of it.<br>
+      COMPEL creates: object_t and value_t on top of this class.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="119">Interface</td>
+    <td width="616" align="left" valign="top" height="119"> 
+      <pre>void set_var_kind(variable_kind_e k);
+variable_kind_e get_var_kind();
+variable_t(const variable_t &rhs);
+variable_t();
+
+</pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">value</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">Derived from variable class. This is the basic data type. 
+      It stores strings or numbers. Floating points are not supported by it yet.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="119">Interface</td>
+    <td width="616" align="left" valign="top" height="119"> 
+      <pre>value_t(const value_t &rhs);
+value_t(long val);
+value_t(const char *p = 0);
+
+  //
+  // --- integer handling
+  //
+
+  long get_int_value() const;
+
+  void set_int_value(long val);
+
+  value_t &operator=(long val);
+
+  //
+  // --- string handling
+  //
+
+  void set_str_value(const char *p);
+
+  const char *get_str_value(int base = 0);
+
+  value_t &operator=(char *p);
+</pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">function</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">Base function class. A function is a symbol. All functions 
+      (or verbs) must extended this class. A function is defined by its name, 
+      description, methods it exports and the number of arguments each method 
+      supports.<br>
+      Each function have access to the interpreter class which will allow the 
+      function to read its arguments and use the symbol table.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="385">Interface</td>
+    <td width="616" align="left" valign="top" height="385"> 
+      <pre>function_t();
+interpreter_t *get_interpreter() const;
+function_t(
+    const char *fncname, 
+    const char *desc, 
+    int minargs,
+    int maxargs,
+    interpreter_t *);
+function_t(const function_t &rhs);
+ 
+virtual parse_errors_e execute() = 0;
+
+void set_interpreter(interpreter_t *interpreter);
+
+void set_namedesc(const char *name, const char *desc);
+
+void set_minmaxargs(const size_t minargs, const size_t maxargs);
+
+size_t get_minargs() const;
+size_t get_maxargs() const;
+
+virtual ~function_t();
+
+</pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">interpreter</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616">This class is the core of COMPEL object. It binds everything 
+      together.<br>
+      An interpreter class parses the program's lines, dispatches every command 
+      to appopriate function, checks for parsing errors, handles variables (symbols) 
+      registration or unregistration.<br>
+      The interpreter has access to the program's symbol table, program's source 
+      code lines.</td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="385">Interface</td>
+    <td width="616" align="left" valign="top" height="385"> 
+      <pre>interpreter_t();
+virtual bool   is_comment_line(CStringListParser * = 0);
+virtual bool   is_variable_name(const char *varname);
+virtual bool   is_void_line(CStringListParser * = 0);
+virtual bool   is_deferred_line(CStringListParser * = 0);
+virtual void   void_line(size_t lineno);
+const char    *get_const_at(size_t nAt, CStringListParser * = 0);
+const char     *evaluate_at(size_t nAt, CStringListParser * = 0);
+variable_t    *get_variable(const char *name);
+variable_t    *get_variable_raw(const char *varname);
+variable_t    *get_variable_at(size_t nAt, CStringListParser * = 0);
+object_t      *get_object(const char *objname);
+object_t      *get_object_at(size_t nAt, CStringListParser * = 0);
+value_t       *get_value(const char *name);
+value_t       *get_value_at(size_t nAt, CStringListParser * = 0);
+bool           load_lines_from_file(size_t set_src_line, const char *filename);
+size_t         get_fnc_arg_count() const;
+  
+// symbol table functions proxy
+symbol_t      *add_symbol(const char *symname, symbol_t *);
+bool           remove_symbol (const char *symname);
+  
+//
+size_t         get_cur_source_lineno() const;
+const char    *get_cur_source_line_str();
+void           set_cur_src_line(size_t lineno);
+void           set_symbol_table(symbol_table_t *);
+virtual parse_errors_e on_parse_error(int lineno, parse_errors_e err);
+parse_errors_e interpret_line();
+parse_errors_e interpret_new_line(const char *);
+parse_errors_e interpreter_line_at(size_t lineno);
+int            find_deferred_line(size_t line_to_find);
+int            find_deferred_line(CStringListParser * = 0);
+friend class interpreter_helper_t;</pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">fnc_vars</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616"> 
+      <p>A function class. This is responsible for variable management commands 
+        such as:<br>
+        - variable definition<br>
+        - variable undefinition<br>
+        - variable value assignment<br>
+        etc... </p>
+    </td>
+  </tr>
+  <tr> 
+    <td width="113" align="left" valign="top" bgcolor="#CCCCCC" height="31">Interface</td>
+    <td width="616" align="left" valign="top" height="31"> 
+      <pre>parse_errors_e execute_var();
+parse_errors_e execute_unvar();
+parse_errors_e execute_assign();</pre>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">fnc_arith</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC" height="64">Objective</td>
+    <td width="616" height="64"> 
+      <p>A function class. This is responsible for arithmetic commands, either 
+        unary or binary. Such as: addition, substraction, division, etc...</p>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">fnc_memory</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616"> 
+      <p>A function class. This is responsible for memory object management commands. 
+        When an object implements methods, a function class must exist so that 
+        the object's methods are exposed to the scripting interface.</p>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">fnc_fileio</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616"> 
+      <p>A function class. This is responsible for memory object management commands. 
+        When an object implements methods, a function class must exist so that 
+        the object's methods are exposed to the scripting interface.</p>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">fnc_branching</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616"> 
+      <p>A function class. This is responsible for branch and control flow commands.<br>
+        Methods such as LABEL, GOTO, if_xxx are defined in this class.</p>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">fnc_echo</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616"> 
+      <p>A function class. This is responsible for branch and control flow commands.<br>
+        Methods such as LABEL, GOTO, if_xxx are defined in this class.</p>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">f1.cpp</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616"> 
+      <p>Driver program. It takes one command line which is the script file name 
+        and executes it.</p>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">tests.cpp</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616"> 
+      <p>Classes test program. This program tests various COMPEL classes and capabilities.</p>
+    </td>
+  </tr>
+</table>
+<p>&nbsp;</p><table width="745" border="1">
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Module name</td>
+    <td width="616">fwd.h</td>
+  </tr>
+  <tr> 
+    <td width="113" bgcolor="#CCCCCC">Objective</td>
+    <td width="616"> 
+      <p>Contains forward class definitions, types definitions, enums, etc...</p>
+    </td>
+  </tr>
+  <tr>
+    <td width="113" bgcolor="#CCCCCC" align="left" valign="top">Snip</td>
+    <td width="616"><pre><FONT COLOR="#990000">enum</FONT> symbol_kind_e<B><FONT COLOR="#663300">
+{</FONT></B>
+  symbol_variable<B><FONT COLOR="#663300">,</FONT></B>
+  symbol_function<B><FONT COLOR="#663300">
+
+};</FONT></B><FONT COLOR="#990000">
+
+enum</FONT> object_kind_e<B><FONT COLOR="#663300">
+{</FONT></B>
+  object_base<B><FONT COLOR="#663300">,</FONT></B>
+  object_file<B><FONT COLOR="#663300">,</FONT></B>
+
+  object_processfile<B><FONT COLOR="#663300">,</FONT></B>
+  object_memory<B><FONT COLOR="#663300">
+};</FONT></B><FONT COLOR="#990000">
+
+enum</FONT> variable_kind_e<B><FONT COLOR="#663300">
+{</FONT></B>
+  variable_value<B><FONT COLOR="#663300">,</FONT></B>
+
+  variable_object<B><FONT COLOR="#663300">
+};</FONT></B><FONT COLOR="#990000">
+
+enum</FONT> parse_errors_e<B><FONT COLOR="#663300">
+{</FONT></B><I><FONT COLOR="#999999"><br>// ....<br><b><font color="#663300">}<br></font></b></FONT></I><FONT COLOR="#990000">
+class</FONT> symbol_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+
+class</FONT> variable_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+class</FONT> value_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+class</FONT> object_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+class</FONT> function_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+
+class</FONT> symbol_table_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+class</FONT> interpreter_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+class</FONT> interpreter_helper_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+
+typedef</FONT> std<B><FONT COLOR="#663300">::</FONT></B>map<B><FONT COLOR="#663300">&lt;</FONT></B>std<B><FONT COLOR="#663300">::</FONT></B>string<B><FONT COLOR="#663300">,</FONT></B> value_t<B><FONT COLOR="#663300">,</FONT></B> RuntimeStdStringCmp<B><FONT COLOR="#663300">&gt;</FONT></B> strvalue_map_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+
+typedef</FONT> std<B><FONT COLOR="#663300">::</FONT></B>map<B><FONT COLOR="#663300">&lt;</FONT></B>std<B><FONT COLOR="#663300">::</FONT></B>string<B><FONT COLOR="#663300">,</FONT></B> symbol_t<B><FONT COLOR="#663300"> *,</FONT></B> RuntimeStdStringCmp<B><FONT COLOR="#663300">&gt;</FONT></B> strsymbol_map_t<B><FONT COLOR="#663300">;</FONT></B><FONT COLOR="#990000">
+
+typedef</FONT> std<B><FONT COLOR="#663300">::</FONT></B>list<B><FONT COLOR="#663300">&lt;</FONT></B>std<B><FONT COLOR="#663300">::</FONT></B>string<B><FONT COLOR="#663300">&gt;</FONT></B> string_list_t<B><FONT COLOR="#663300">;</FONT></B></pre>&nbsp;</td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<p>
+<h2><u><a name="conclusion"></a>Conclusion</u></h2>
+<p><u>Distributed files:</u></p>
+<table width="454" border="1">
+  <tr bgcolor="#CCCCCC"> 
+    <td width="129">Location</td>
+    <td width="309">Purpose</td>
+  </tr>
+  <tr> 
+    <td width="129">binary\*.*</td>
+    <td width="309">Contains the compel.exe compiled binary + a list of sample 
+      compel programs</td>
+  </tr>
+  <tr> 
+    <td width="129">docreader\</td>
+    <td width="309">Contains the VAULT program in order to read *.VLT files.</td>
+  </tr>
+  <tr> 
+    <td width="129">document\</td>
+    <td width="309">Contains this document and a VAULT document (for language 
+      technical details and references)</td>
+  </tr>
+  <tr> 
+    <td width="129">src\*.*</td>
+    <td width="309">Contains current compel's source code</td>
+  </tr>
+</table>
+<p><u>Last words:</u><br>
+  <br>
+  COMPEL needs alot of work, however its goal is to stay a command based language 
+  with simple syntax and a wide range of utility functions.<br>
+  For future updates, send me inquiry emails to <a href="mailto:elias.bachaalany@gmail.com">elias.bachaalany@gmail.com</a></p>
+</body>
+</html>

@@ -1,0 +1,10 @@
+ext_CanvasCreate;
+var $s1 $ext_CanvasCreate;
+ext_SelectFgColor "0" "255" "0";
+ext_DrawRect "20" "20" "50" "50" "0";
+ext_DrawEllipse "75" "75" "90" "90" "0";
+ext_CanvasCreate;
+var $s2 $ext_CanvasCreate;
+ext_DrawRect "20" "20" "50" "50" "0";
+ext_SaveCanvas "testJim.jpg";
+ext_SelectCanvas $s1;

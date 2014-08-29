@@ -1,0 +1,31 @@
+Cvclear
+var $n
+var $color
+
+randomize
+
+{
+  rand $color
+  inputbox $n "How many shapes you want?"
+  if $n > 10
+  {
+    msgbox "Number " $n " too big!"
+    continue 1 
+  }
+}
+
+var $i
+var $x1 0
+var $y1 0
+var $x2 400
+var $y2 400
+for $i 1 to $n
+{
+  rand $color
+  CvRgbColor $color
+  CvRect $x1 $y1 $x2 $y2
+  sub $x2 20
+  sub $y2 20
+  add $x1 20
+  add $y1 20
+}

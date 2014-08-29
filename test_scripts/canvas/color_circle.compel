@@ -1,0 +1,34 @@
+compellib.dl canvas "compel_canvas_ext.dll"
+
+Canvas.Create 450 450 0 0
+Canvas.SetTitle "Color Circle"
+
+var $colors.
+var $colors.0 0xFF0000
+var $colors.1 0x00FF00
+var $colors.2 0x0000FF
+var $colors.3 0x1244AA
+
+var $maxcolor 4
+var $color
+
+var $radMAX 10
+var $rad
+var $i
+var $max 20
+clearit
+
+for $i $max downto 1
+{
+  expr $color $i % $maxcolor
+  Canvas.SelectBkColor $colors.$color
+  expr $rad $i * $radMAX
+  Canvas.Circle 200 200 $rad
+}
+Canvas.Wait
+end
+
+command clearit
+{
+  Canvas.Clear 0xFFFFFF
+}

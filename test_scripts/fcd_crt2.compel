@@ -1,0 +1,45 @@
+/*
+  crt test #2
+
+  password_prompt
+
+*/
+
+command pass_prompt $prompt
+{
+  # optional 2nd parameter is the pwd char
+  var $fargs.pwdchar "*"
+  if_eq $fargs._count 2 var $fargs.pwdchar $fargs.2
+
+  var $fargs.ch
+  var $fargs.result
+  var $fargs.sentinel "\r"
+  var $fargs.lastresult
+
+  echo $fargs.prompt
+
+  # loop
+  {
+    # read character
+    getch $fargs.ch
+
+    # should we stop reading?
+    if_eq $fargs.ch $fargs.sentinel break
+    echo $fargs.pwdchar
+    var $fargs.result $fargs.result $fargs.ch
+    continue
+  }
+
+  assign $pass_prompt $fargs.result
+}
+
+pass_prompt "enter password:" "*"
+
+if $pass_prompt == "compel"
+{
+  msgbox "Welcome !!!"
+}
+else
+{
+  msgbox "Too bad !!! Wrong password '" $pass_prompt "'\n"
+}

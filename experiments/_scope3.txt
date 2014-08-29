@@ -1,0 +1,55 @@
+if a
+{
+  function 
+  {
+    function
+    {
+    }
+    function
+    {
+      if
+      {
+      }
+    }
+  }
+  function
+  {
+  }
+  if
+  {
+  }
+}
+else
+{
+
+function
+{
+  function
+  {
+  }
+  if
+  {
+  }
+  else
+  {
+    function
+    {
+      if
+      {
+      }
+      else
+      {
+      }
+    }
+  }
+}
+if
+{
+}
+else
+{
+}
+function
+{
+}
+}

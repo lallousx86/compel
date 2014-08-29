@@ -1,0 +1,16 @@
+// get date and time
+var $dt.
+
+getdatetime $dt
+
+msgbox "We are today: " $dt.monthname " " $dt.day ", " $dt.year
+
+yesnobox $dt.day "Do you want to know the time?"
+
+if $dt.day == 1
+{
+  msgbox $dt.hour ":" $dt.minute ":" $dt.second
+}
+//msgbox $dt "\n"
+
+end

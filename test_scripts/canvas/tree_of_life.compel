@@ -1,0 +1,64 @@
+compellib.dl canvas "compel_canvas_ext.dll"
+
+var $rad 30
+
+Canvas.Create 400 700 0 0
+Canvas.SetTitle "Color Circle"
+
+Canvas.Clear
+
+#Canvas.SelectFont "Courier New" 8 0xff0000
+
+# kether
+blue
+canvas.Circle 200 60 $rad
+white
+canvas.drawtext 180 50 "Kether"
+black
+
+#
+canvas.Circle 100 120 $rad
+canvas.Circle 300 120 $rad
+
+#
+canvas.Circle 100 220 $rad
+canvas.Circle 300 220 $rad
+
+#
+canvas.Circle 200 320 $rad
+
+#
+canvas.Circle 100 420 $rad
+canvas.Circle 300 420 $rad
+
+
+#
+canvas.Circle 200 520 $rad
+
+# malkuth
+red
+canvas.Circle 200 620 $rad
+white
+canvas.drawtext 180 610 "malkuth"
+Canvas.Wait
+Canvas.Close
+end
+
+command blue
+{
+  canvas.selectbkcolor 0x0000ff
+}
+command red
+{
+  canvas.selectbkcolor 0xff0000
+}
+
+command black
+{
+  canvas.selectbkcolor 0
+}
+
+command white
+{
+  canvas.selectbkcolor 0xffffff
+}
