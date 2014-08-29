@@ -1,0 +1,16 @@
+bak
+trash
+archive
+delphi_samples
+material
+c60
+vsd
+ignore
+files
+*.bdsproj
+*.identcache
+*.cwks
+_log.txt
+_log_archive.txt
+test_scripts/fcd_ini.ini
+_bak.bat
