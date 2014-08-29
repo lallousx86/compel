@@ -1,0 +1,36 @@
+speech_init
+
+suryanamaskar
+
+# sarvangasana
+
+speech_deinit
+
+end
+
+# Functions
+
+command sarvangasana
+{
+  speaktext "Get ready for Sarvangasana"
+  wait 10
+
+  speaktext "Now relax"
+  wait 600
+
+  speaktext "All done!"
+}
+
+command suryanamaskar
+{
+  speaktext "Get ready for Suryanamaskar"
+  wait 10
+
+  speakcount 1 12 25
+
+  speaktext "All done!"
+}
+
+# Includes
+include "util_inc.compel"
+include "sapi_inc.compel"

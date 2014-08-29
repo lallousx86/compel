@@ -1,0 +1,7 @@
+# wait in seconds
+command wait $secs
+{
+  var $t 1000
+  mul $t $fargs.secs
+  delay $t
+}
